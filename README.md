@@ -44,7 +44,7 @@ Data is sourced directly from the **Philippine Statistics Authority (PSA)**
 quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/).
 
 The dataset is refreshed automatically via Cloudflare Workers Cron Triggers 
-on each new PSA quarterly release. Last synced: [date].
+on each new PSA quarterly release. Last synced: March 1, 2026.
 
 ## Data Pipeline
 
@@ -97,9 +97,9 @@ Update `wrangler.jsonc` with the returned namespace ID.
 
 ## Built by
 
-**Aaron Zara** — Fractional CTO & Principal at [Godmode Digital](https://godmode.ph)
+**Aaron Zara** - Fractional CTO & Principal at [Godmode Digital](https://godmode.ph)
 
-Engineer behind [Ren.ph](https://ren.ph) — Philippines' largest programmatic 
+Engineer behind [Ren.ph](https://ren.ph) - Philippines' largest programmatic 
 real estate platform with 60,000+ structured geographic pages. The PSGC MCP 
 was built as part of a broader initiative to expose Philippine government data 
 as grounding infrastructure for AI agents.
@@ -121,8 +121,8 @@ government publications.
 ## Contributing & Issues
 
 Found a data error or edge case? Open an issue on GitHub. PSGC has known 
-quirks — NCR districts, Cotabato City classification, BARMM Special 
-Geographic Units — and community reports help keep the data accurate.
+quirks - NCR districts, Cotabato City classification, BARMM Special 
+Geographic Units - and community reports help keep the data accurate.
 
 PSA publishes PSGC updates quarterly. If you notice the data is stale, 
 open an issue and it will be refreshed manually ahead of the next scheduled sync.
