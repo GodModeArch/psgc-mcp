@@ -44,7 +44,7 @@ function main() {
 
 		try {
 			execSync(
-				`npx wrangler kv bulk put "${filePath}" --binding=PSGC_KV`,
+				`npx wrangler kv bulk put "${filePath}" --binding=PSGC_KV --remote`,
 				{ stdio: "inherit" },
 			);
 			console.log(`  Done.\n`);
