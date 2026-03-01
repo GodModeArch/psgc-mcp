@@ -38,13 +38,28 @@ Add to your MCP client configuration:
   }
 }
 ```
+
 ## Data Source
 
-Data is sourced directly from the **Philippine Statistics Authority (PSA)** 
-quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/).
+Data is sourced directly from the **Philippine Statistics Authority (PSA)** quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/). Not a third-party mirror.
 
-The dataset is refreshed automatically via Cloudflare Workers Cron Triggers 
-on each new PSA quarterly release. Last synced: March 1, 2026.
+The dataset is refreshed automatically via Cloudflare Workers Cron Triggers on each new PSA quarterly release. Last synced: March 1, 2026.
+
+## Related Projects
+
+This is part of a suite of Philippine public data MCP servers built by Godmode Digital:
+
+- **PSGC MCP** ← you are here
+- **PH Holidays MCP** — coming soon
+- **BSP Bank Directory MCP** — coming soon
+
+All servers are free, public, read-only, and sourced directly from official Philippine government publications.
+
+## Contributing & Issues
+
+Found a data error or edge case? Open an issue on GitHub. PSGC has known quirks — NCR districts, Cotabato City classification, BARMM Special Geographic Units — and community reports help keep the data accurate.
+
+PSA publishes PSGC updates quarterly. If you notice the data is stale, open an issue and it will be refreshed manually ahead of the next scheduled sync.
 
 ## Data Pipeline
 
@@ -97,35 +112,12 @@ Update `wrangler.jsonc` with the returned namespace ID.
 
 ## Built by
 
-**Aaron Zara** - Fractional CTO & Principal at [Godmode Digital](https://godmode.ph)
+**Aaron Zara** — Fractional CTO & Principal at [Godmode Digital](https://godmode.ph)
 
-Engineer behind [Ren.ph](https://ren.ph) - Philippines' largest programmatic 
-real estate platform with 60,000+ structured geographic pages. The PSGC MCP 
-was built as part of a broader initiative to expose Philippine government data 
-as grounding infrastructure for AI agents.
+Engineer behind [Ren.ph](https://ren.ph) — Philippines' largest programmatic real estate platform with 60,000+ structured geographic pages. The PSGC MCP was built as part of a broader initiative to expose Philippine government data as grounding infrastructure for AI agents.
 
-For enterprise use cases, SLA requirements, or custom PH data integrations:  
+For enterprise use cases, SLA requirements, or custom PH data integrations:
 → [godmode.ph](https://godmode.ph)
-
-## Related Projects
-
-This is part of a suite of Philippine public data MCP servers:
-
-- **PSGC MCP** ← you are here
-- **PH Holidays MCP** — coming soon
-- **BSP Bank Directory MCP** — coming soon
-
-All servers are free, public, read-only, and sourced from official PH 
-government publications.
-
-## Contributing & Issues
-
-Found a data error or edge case? Open an issue on GitHub. PSGC has known 
-quirks - NCR districts, Cotabato City classification, BARMM Special 
-Geographic Units - and community reports help keep the data accurate.
-
-PSA publishes PSGC updates quarterly. If you notice the data is stale, 
-open an issue and it will be refreshed manually ahead of the next scheduled sync.
 
 ## License
 

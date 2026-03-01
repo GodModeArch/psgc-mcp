@@ -1,7 +1,24 @@
 {
 	"name": "psgc-mcp",
 	"version": "1.0.0",
-	"private": true,
+	"private": false,
+	"description": "MCP server providing Philippine Standard Geographic Code (PSGC) data to AI agents. Data sourced directly from PSA quarterly publications.",
+	"author": "Aaron Zara <aaron@godmode.ph>",
+	"homepage": "https://godmode.ph",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/GodModeArch/psgc-mcp"
+	},
+	"license": "MIT",
+	"keywords": [
+		"mcp",
+		"philippines",
+		"psgc",
+		"barangay",
+		"philippine-geography",
+		"psa",
+		"cloudflare-workers"
+	],
 	"scripts": {
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
