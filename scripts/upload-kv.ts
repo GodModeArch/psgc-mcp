@@ -10,8 +10,10 @@
 import { execSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const OUTPUT_DIR = path.join(import.meta.dirname, "data", "output");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const OUTPUT_DIR = path.join(__dirname, "data", "output");
 
 function main() {
 	if (!fs.existsSync(OUTPUT_DIR)) {

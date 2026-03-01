@@ -11,11 +11,13 @@
 import ExcelJS from "exceljs";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import { normalize, deriveParentCode } from "../src/utils";
 import type { PSGCEntity, PSGCLevel, SearchIndexEntry } from "../src/types";
 import { KV_PREFIX } from "../src/types";
 
-const DATA_DIR = path.join(import.meta.dirname, "data");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DATA_DIR = path.join(__dirname, "data");
 const OUTPUT_DIR = path.join(DATA_DIR, "output");
 const CHUNK_SIZE = 10_000;
 
