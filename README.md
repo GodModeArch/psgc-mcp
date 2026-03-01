@@ -90,8 +90,8 @@ Currently serving **Q3 2025** data (as of 30 September 2025), with population co
 Part of a suite of Philippine public data MCP servers:
 
 - **PSGC MCP** (this repo)
-- **PH Holidays MCP** — coming soon
-- **BSP Bank Directory MCP** — coming soon
+- **PH Holidays MCP**  -> Coming soon
+- **BSP Bank Directory MCP** -> Coming soon
 
 All servers are free, public, and read-only. Data pulled from official Philippine government sources.
 
@@ -147,9 +147,9 @@ Update `wrangler.jsonc` with the returned namespace ID.
 
 ## Built by
 
-**Aaron Zara** — Fractional CTO at [Godmode Digital](https://godmode.ph)
+**Aaron Zara** - Fractional CTO at [Godmode Digital](https://godmode.ph)
 
-Previously built [Ren.ph](https://ren.ph), a programmatic real estate platform with 60,000+ structured geographic pages covering every barangay, city, and province in the Philippines. The PSGC MCP came out of needing reliable, queryable PH geography data for AI agents and not finding anything that fit.
+Previously built [REN.PH](https://ren.ph), a programmatic real estate platform with 60,000+ structured geographic pages covering every barangay, city, and province in the Philippines. The PSGC MCP came out of needing reliable, queryable PH geography data for AI agents and not finding anything that fit.
 
 For enterprise SLAs, custom integrations, or other PH data sources:
 → [godmode.ph](https://godmode.ph)
