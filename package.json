@@ -25,6 +25,10 @@
 		"start": "wrangler dev",
 		"cf-typegen": "wrangler types",
 		"type-check": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:integration": "vitest run --config vitest.integration.config.ts",
+		"test:all": "npm run test && npm run test:integration",
 		"parse-psgc": "tsx scripts/parse-psgc.ts",
 		"upload-kv": "tsx scripts/upload-kv.ts"
 	},
@@ -33,9 +37,11 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.12.18",
 		"exceljs": "^4.4.0",
 		"tsx": "^4.19.0",
 		"typescript": "5.9.3",
+		"vitest": "^3.2.4",
 		"wrangler": "^4.67.0"
 	}
 }

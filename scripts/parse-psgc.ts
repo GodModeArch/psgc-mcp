@@ -25,9 +25,12 @@ const CHUNK_SIZE = 10_000;
 
 function findExcelFile(): string {
 	const files = fs.readdirSync(DATA_DIR).filter((f) => f.endsWith(".xlsx"));
-	const psgcFile = files.find(
-		(f) => f.toLowerCase().startsWith("psgc") || f.includes("PSGC"),
-	);
+	// Prefer the Publication Datafile over summary/changes files
+	const psgcFile =
+		files.find((f) => f.includes("Publication-Datafile")) ||
+		files.find(
+			(f) => f.toLowerCase().startsWith("psgc") || f.includes("PSGC"),
+		);
 	if (!psgcFile) {
 		console.error("No PSGC Excel file found in scripts/data/");
 		console.error("Place the PSA PSGC Publication .xlsx file there first.");
@@ -38,7 +41,7 @@ function findExcelFile(): string {
 
 // ── Map geographic level string from Excel to PSGCLevel ──────────────
 
-const LEVEL_MAP: Record<string, PSGCLevel> = {
+export const LEVEL_MAP: Record<string, PSGCLevel> = {
 	Reg: "Reg",
 	Prov: "Prov",
 	Dist: "Dist",
@@ -50,7 +53,7 @@ const LEVEL_MAP: Record<string, PSGCLevel> = {
 	Bgy: "Bgy",
 };
 
-function parseLevel(raw: string): PSGCLevel | null {
+export function parseLevel(raw: string): PSGCLevel | null {
 	const trimmed = raw?.trim();
 	if (!trimmed) return null;
 	return LEVEL_MAP[trimmed] ?? null;
@@ -133,9 +136,54 @@ function cellNum(row: ExcelJS.Row, col: number | undefined): number | undefined 
 
 // ── Pad code to 10 digits ────────────────────────────────────────────
 
-function padCode(raw: string | number): string {
+export function padCode(raw: string | number): string {
 	const str = String(raw).replace(/\D/g, "");
 	return str.padStart(10, "0");
+}
+
+// ── Resolve parent codes with HUC/ICC correction ────────────────────
+
+export function resolveParents(entities: Map<string, PSGCEntity>): void {
+	for (const entity of entities.values()) {
+		const parentCode = deriveParentCode(entity.code, entity.level);
+		if (!parentCode) continue;
+
+		if (entities.has(parentCode)) {
+			entity.parent = parentCode;
+		} else {
+			// HUC/ICC fix: derived province doesn't exist, try region or district
+			if (entity.level === "City" || entity.level === "Mun") {
+				const regionCode = entity.code.slice(0, 2) + "00000000";
+
+				// Check if there's a district in this region that contains this city
+				// NCR districts have codes like 13XX000000
+				const distCode = entity.code.slice(0, 4) + "000000";
+				if (entities.has(distCode) && entities.get(distCode)!.level === "Dist") {
+					entity.parent = distCode;
+				} else {
+					// Try all districts in the region
+					let foundDist = false;
+					for (const [code, e] of entities) {
+						if (
+							e.level === "Dist" &&
+							code.startsWith(entity.code.slice(0, 2)) &&
+							code.slice(2, 4) === entity.code.slice(2, 4)
+						) {
+							entity.parent = code;
+							foundDist = true;
+							break;
+						}
+					}
+					if (!foundDist) {
+						entity.parent = regionCode;
+					}
+				}
+			} else {
+				// Fallback to region
+				entity.parent = entity.code.slice(0, 2) + "00000000";
+			}
+		}
+	}
 }
 
 // ── Main parse function ──────────────────────────────────────────────
@@ -252,46 +300,7 @@ async function main() {
 
 	// ── Derive parent codes ────────────────────────────────────────
 
-	for (const entity of entities.values()) {
-		const parentCode = deriveParentCode(entity.code, entity.level);
-		if (!parentCode) continue;
-
-		if (entities.has(parentCode)) {
-			entity.parent = parentCode;
-		} else {
-			// HUC/ICC fix: derived province doesn't exist, try region or district
-			if (entity.level === "City" || entity.level === "Mun") {
-				const regionCode = entity.code.slice(0, 2) + "00000000";
-
-				// Check if there's a district in this region that contains this city
-				// NCR districts have codes like 13XX000000
-				const distCode = entity.code.slice(0, 4) + "000000";
-				if (entities.has(distCode) && entities.get(distCode)!.level === "Dist") {
-					entity.parent = distCode;
-				} else {
-					// Try all districts in the region
-					let foundDist = false;
-					for (const [code, e] of entities) {
-						if (
-							e.level === "Dist" &&
-							code.startsWith(entity.code.slice(0, 2)) &&
-							code.slice(2, 4) === entity.code.slice(2, 4)
-						) {
-							entity.parent = code;
-							foundDist = true;
-							break;
-						}
-					}
-					if (!foundDist) {
-						entity.parent = regionCode;
-					}
-				}
-			} else {
-				// Fallback to region
-				entity.parent = entity.code.slice(0, 2) + "00000000";
-			}
-		}
-	}
+	resolveParents(entities);
 
 	// Verify parent assignment stats
 	let noParent = 0;
@@ -390,7 +399,13 @@ async function main() {
 	console.log("Run 'npm run upload-kv' to upload to Cloudflare KV.");
 }
 
-main().catch((err) => {
-	console.error("Fatal error:", err);
-	process.exit(1);
-});
+// Only run when executed directly (not imported for testing)
+const isDirectRun =
+	process.argv[1]?.endsWith("parse-psgc.ts") ||
+	process.argv[1]?.endsWith("parse-psgc.js");
+if (isDirectRun) {
+	main().catch((err) => {
+		console.error("Fatal error:", err);
+		process.exit(1);
+	});
+}
