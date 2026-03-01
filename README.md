@@ -2,7 +2,7 @@
 
 A [Model Context Protocol](https://modelcontextprotocol.io/) server that provides Philippine Standard Geographic Code (PSGC) data to LLMs. Built on Cloudflare Workers with KV storage.
 
-Public, read-only, no authentication required. Data sourced from the [Philippine Statistics Authority](https://psa.gov.ph/classification/psgc) quarterly PSGC publication.
+Public, read-only, no authentication required. Data sourced directly from the [Philippine Statistics Authority](https://psa.gov.ph/classification/psgc/) quarterly PSGC publication — not a third-party mirror. Cached in Cloudflare KV for reliability and low-latency global access.
 
 ## Tools
 
@@ -38,6 +38,13 @@ Add to your MCP client configuration:
   }
 }
 ```
+## Data Source
+
+Data is sourced directly from the **Philippine Statistics Authority (PSA)** 
+quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/).
+
+The dataset is refreshed automatically via Cloudflare Workers Cron Triggers 
+on each new PSA quarterly release. Last synced: [date].
 
 ## Data Pipeline
 
@@ -87,6 +94,38 @@ npx wrangler kv namespace create PSGC_KV
 ```
 
 Update `wrangler.jsonc` with the returned namespace ID.
+
+## Built by
+
+**Aaron Zara** — Fractional CTO & Principal at [Godmode Digital](https://godmode.ph)
+
+Engineer behind [Ren.ph](https://ren.ph) — Philippines' largest programmatic 
+real estate platform with 60,000+ structured geographic pages. The PSGC MCP 
+was built as part of a broader initiative to expose Philippine government data 
+as grounding infrastructure for AI agents.
+
+For enterprise use cases, SLA requirements, or custom PH data integrations:  
+→ [godmode.ph](https://godmode.ph)
+
+## Related Projects
+
+This is part of a suite of Philippine public data MCP servers:
+
+- **PSGC MCP** ← you are here
+- **PH Holidays MCP** — coming soon
+- **BSP Bank Directory MCP** — coming soon
+
+All servers are free, public, read-only, and sourced from official PH 
+government publications.
+
+## Contributing & Issues
+
+Found a data error or edge case? Open an issue on GitHub. PSGC has known 
+quirks — NCR districts, Cotabato City classification, BARMM Special 
+Geographic Units — and community reports help keep the data accurate.
+
+PSA publishes PSGC updates quarterly. If you notice the data is stale, 
+open an issue and it will be refreshed manually ahead of the next scheduled sync.
 
 ## License
 
