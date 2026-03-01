@@ -1,8 +1,12 @@
 # PSGC MCP Server
 
+![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-green)
+
 A [Model Context Protocol](https://modelcontextprotocol.io/) server that provides Philippine Standard Geographic Code (PSGC) data to LLMs. Built on Cloudflare Workers with KV storage.
 
-Public, read-only, no authentication required. Data sourced directly from the [Philippine Statistics Authority](https://psa.gov.ph/classification/psgc/) quarterly PSGC publication — not a third-party mirror. Cached in Cloudflare KV for reliability and low-latency global access.
+Public, read-only, no authentication required. Data sourced directly from the [Philippine Statistics Authority](https://psa.gov.ph/classification/psgc/) quarterly PSGC publication. Cached in Cloudflare KV for reliability and low-latency global access.
 
 ## Tools
 
@@ -16,19 +20,20 @@ Public, read-only, no authentication required. Data sourced directly from the [P
 
 ### Geographic Levels
 
-- `Reg` - Region (18)
-- `Prov` - Province (82)
-- `Dist` - District (4, NCR only)
-- `City` - City (149)
-- `Mun` - Municipality (1,493)
-- `SubMun` - Sub-Municipality (16, Manila only)
-- `SGU` - Special Geographic Unit (~8, BARMM)
-- `Bgy` - Barangay (~42,000)
+| Level | Description | Count |
+|-------|-------------|-------|
+| `Reg` | Region | 18 |
+| `Prov` | Province | 82 |
+| `Dist` | District (NCR only) | 4 |
+| `City` | City | 149 |
+| `Mun` | Municipality | 1,493 |
+| `SubMun` | Sub-Municipality (Manila only) | 16 |
+| `SGU` | Special Geographic Unit (BARMM) | ~8 |
+| `Bgy` | Barangay | ~42,000 |
 
 ## Connect
 
 Add to your MCP client configuration:
-
 ```json
 {
   "mcpServers": {
@@ -39,38 +44,72 @@ Add to your MCP client configuration:
 }
 ```
 
+### Quick test
+```bash
+curl -X POST https://psgc-mcp.godmodearch.workers.dev/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/call",
+    "params": {
+      "name": "search",
+      "arguments": { "query": "Carmona", "level": "Mun" }
+    }
+  }'
+```
+
+## PSGC Code Format
+
+PSGC codes are 10 digits with no spaces. The segments encode the full geographic hierarchy:
+```
+1 4 0 2 1 0 0 0 0 0
+│ │ └─┬─┘ └─┬─┘ └─┬─┘
+│ │   │     │     └── Barangay (last 3 digits)
+│ │   │     └──────── Municipality/City (3 digits)
+│ │   └────────────── Province (2 digits)
+│ └────────────────── Island Group modifier
+└──────────────────── Region (1 digit)
+```
+
+Leading zeros are significant — `014021000000` and `14021000000` are different codes. Always use the full 10-digit string.
+
+Known edge cases:
+- NCR uses **Districts** instead of Provinces (`Dist` level)
+- Cotabato City is administratively in BARMM but geographically in Region XII — it appears under `Prov` code `124700000` (Maguindanao del Norte)
+- BARMM Special Geographic Units (`SGU`) don't follow the standard hierarchy and have no Province parent
+
 ## Data Source
 
-Data is sourced directly from the **Philippine Statistics Authority (PSA)** quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/). Not a third-party mirror.
+Data is sourced directly from the **Philippine Statistics Authority (PSA)** quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/).
 
-Currently serving **Q3 2025** PSGC data (as of 30 September 2025), including population counts from the **2024 Census of Population** (Proclamation No. 973). Last synced: March 1, 2026.
+Currently serving **Q3 2025** data (as of 30 September 2025), with population counts from the **2024 Census of Population** (Proclamation No. 973). Last synced: March 1, 2026.
 
 ## Related Projects
 
-This is part of a suite of Philippine public data MCP servers built by Godmode Digital:
+Part of a suite of Philippine public data MCP servers:
 
-- **PSGC MCP** ← you are here
+- **PSGC MCP** (this repo)
 - **PH Holidays MCP** — coming soon
 - **BSP Bank Directory MCP** — coming soon
 
-All servers are free, public, read-only, and sourced directly from official Philippine government publications.
+All servers are free, public, and read-only. Data pulled from official Philippine government sources.
 
-## Contributing & Issues
+## Contributing and Issues
 
-Found a data error or edge case? Open an issue on GitHub. PSGC has known quirks — NCR districts, Cotabato City classification, BARMM Special Geographic Units — and community reports help keep the data accurate.
+Found a data error or an edge case that isn't handled? Open an issue. The quirks section above covers the most common ones, but PSGC data has accumulated inconsistencies over decades of LGU reclassifications and the issues list is the best place to track them.
 
-PSA publishes PSGC updates quarterly. If you notice the data is stale, open an issue and it will be refreshed manually ahead of the next scheduled sync.
+PSA publishes updates quarterly. If the data looks stale, open an issue and it will be refreshed ahead of the next scheduled sync.
 
 ## Data Pipeline
 
-The PSGC data is parsed from PSA's Excel publication and stored in Cloudflare KV. To update the data:
+The PSGC data is parsed from PSA's Excel publication and stored in Cloudflare KV. To update:
 
 ### 1. Download the PSGC Excel file
 
 Get the latest publication from [PSA PSGC](https://psa.gov.ph/classification/psgc) and place it in `scripts/data/`.
 
 ### 2. Parse
-
 ```bash
 npm run parse-psgc
 ```
@@ -78,7 +117,6 @@ npm run parse-psgc
 Reads the Excel file, derives parent relationships, and writes chunked JSON files to `scripts/data/output/`.
 
 ### 3. Upload to KV
-
 ```bash
 npm run upload-kv
 ```
@@ -86,24 +124,21 @@ npm run upload-kv
 Bulk uploads all JSON chunks to Cloudflare KV via wrangler.
 
 ### 4. Deploy
-
 ```bash
 npm run deploy
 ```
 
 ## Development
-
 ```bash
 npm install
 npm run dev
 ```
 
-The dev server starts at `http://localhost:8787`. Connect your MCP client to `http://localhost:8787/mcp`.
+Dev server starts at `http://localhost:8787`. Connect your MCP client to `http://localhost:8787/mcp`.
 
 ## Setup
 
 Before first deploy, create the KV namespace:
-
 ```bash
 npx wrangler kv namespace create PSGC_KV
 ```
@@ -112,11 +147,11 @@ Update `wrangler.jsonc` with the returned namespace ID.
 
 ## Built by
 
-**Aaron Zara** — Fractional CTO & Principal at [Godmode Digital](https://godmode.ph)
+**Aaron Zara** — Fractional CTO at [Godmode Digital](https://godmode.ph)
 
-Engineer behind [Ren.ph](https://ren.ph) — Philippines' largest programmatic real estate platform with 60,000+ structured geographic pages. The PSGC MCP was built as part of a broader initiative to expose Philippine government data as grounding infrastructure for AI agents.
+Previously built [Ren.ph](https://ren.ph), a programmatic real estate platform with 60,000+ structured geographic pages covering every barangay, city, and province in the Philippines. The PSGC MCP came out of needing reliable, queryable PH geography data for AI agents and not finding anything that fit.
 
-For enterprise use cases, SLA requirements, or custom PH data integrations:
+For enterprise SLAs, custom integrations, or other PH data sources:
 → [godmode.ph](https://godmode.ph)
 
 ## License
