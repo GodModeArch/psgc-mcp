@@ -20,7 +20,7 @@ Public, read-only, no authentication required. Data sourced directly from the [P
 - `Prov` - Province (82)
 - `Dist` - District (4, NCR only)
 - `City` - City (149)
-- `Mun` - Municipality (1,494)
+- `Mun` - Municipality (1,493)
 - `SubMun` - Sub-Municipality (16, Manila only)
 - `SGU` - Special Geographic Unit (~8, BARMM)
 - `Bgy` - Barangay (~42,000)
@@ -43,7 +43,7 @@ Add to your MCP client configuration:
 
 Data is sourced directly from the **Philippine Statistics Authority (PSA)** quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/). Not a third-party mirror.
 
-The dataset is refreshed automatically via Cloudflare Workers Cron Triggers on each new PSA quarterly release. Last synced: March 1, 2026.
+Currently serving **Q3 2025** PSGC data (as of 30 September 2025), including population counts from the **2024 Census of Population** (Proclamation No. 973). Last synced: March 1, 2026.
 
 ## Related Projects
 
