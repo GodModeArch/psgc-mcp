@@ -24,6 +24,11 @@
 			"id": "63ece634783742fe9dbab5b92f2040e7"
 		}
 	],
+	"vars": {
+		"DATASET_VERSION": "PSGC Q4 2025",
+		"DATASET_DATE": "2025-12-31",
+		"LAST_SYNCED": "2026-03-02"
+	},
 	"observability": {
 		"enabled": true
 	}
