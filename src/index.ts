@@ -10,6 +10,8 @@ import {
 	handleListByType,
 } from "./tool-handlers";
 import type { SearchCache } from "./tool-handlers";
+import { buildMeta } from "./response";
+import type { ApiMeta } from "./response";
 
 // Module-level search index cache (survives across requests within same isolate)
 const searchIndexCache: SearchCache = { current: null };
@@ -38,11 +40,16 @@ const LISTABLE_LEVELS: [PSGCLevel, ...PSGCLevel[]] = [
 export class PsgcMCP extends McpAgent {
 	server = new McpServer({
 		name: "PSGC",
-		version: "1.0.0",
+		version: "1.1.0",
 	});
 
 	async init() {
 		const kv = this.env.PSGC_KV;
+		const meta: ApiMeta = buildMeta({
+			datasetVersion: this.env.DATASET_VERSION,
+			datasetDate: this.env.DATASET_DATE,
+			lastSynced: this.env.LAST_SYNCED,
+		});
 
 		// ── Tool 1: lookup ──────────────────────────────────────────
 
@@ -50,7 +57,7 @@ export class PsgcMCP extends McpAgent {
 			"lookup",
 			"Look up a Philippine geographic entity by its 10-digit PSGC code. Returns the full entity record including name, level, parent, population, and classification data.",
 			{ code: z.string().length(10).describe("10-digit PSGC code") },
-			async ({ code }) => handleLookup({ code }, kv),
+			async ({ code }) => handleLookup({ code }, kv, meta),
 		);
 
 		// ── Tool 2: search ──────────────────────────────────────────
@@ -71,9 +78,13 @@ export class PsgcMCP extends McpAgent {
 					.max(50)
 					.optional()
 					.describe("Max results (default 10, max 50)"),
+				strict: z
+					.boolean()
+					.optional()
+					.describe("Exact name match only (no partial/substring matching)"),
 			},
-			async ({ query, level, limit }) =>
-				handleSearch({ query, level, limit }, kv, searchIndexCache),
+			async ({ query, level, limit, strict }) =>
+				handleSearch({ query, level, limit, strict }, kv, searchIndexCache, meta),
 		);
 
 		// ── Tool 3: get_hierarchy ───────────────────────────────────
@@ -84,7 +95,7 @@ export class PsgcMCP extends McpAgent {
 			{
 				code: z.string().length(10).describe("10-digit PSGC code"),
 			},
-			async ({ code }) => handleGetHierarchy({ code }, kv),
+			async ({ code }) => handleGetHierarchy({ code }, kv, meta),
 		);
 
 		// ── Tool 4: list_children ───────────────────────────────────
@@ -102,7 +113,7 @@ export class PsgcMCP extends McpAgent {
 					.optional()
 					.describe("Filter children by geographic level"),
 			},
-			async ({ code, level }) => handleListChildren({ code, level }, kv),
+			async ({ code, level }) => handleListChildren({ code, level }, kv, meta),
 		);
 
 		// ── Tool 5: list_by_type ────────────────────────────────────
@@ -117,7 +128,7 @@ export class PsgcMCP extends McpAgent {
 						"Geographic level: Reg (region), Prov (province), Dist (district), City, Mun (municipality), SubMun (sub-municipality), SGU (special geographic unit)",
 					),
 			},
-			async ({ level }) => handleListByType({ level }, kv),
+			async ({ level }) => handleListByType({ level }, kv, meta),
 		);
 	}
 }

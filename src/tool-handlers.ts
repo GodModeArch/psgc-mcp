@@ -1,6 +1,8 @@
 import type { PSGCEntity, PSGCLevel, SearchIndexEntry } from "./types";
 import { KV_PREFIX } from "./types";
 import { normalize, deriveAncestorCodes } from "./utils";
+import type { ApiMeta } from "./response";
+import { toApiEntity, toApiSearchResult, wrapResponse } from "./response";
 
 /** Minimal KV interface for dependency injection (subset of KVNamespace) */
 export interface KVGet {
@@ -24,6 +26,7 @@ export interface ToolResult {
 export async function handleLookup(
 	args: { code: string },
 	kv: KVGet,
+	meta: ApiMeta,
 ): Promise<ToolResult> {
 	const raw = await kv.get(`${KV_PREFIX.entity}:${args.code}`);
 	if (!raw) {
@@ -37,16 +40,22 @@ export async function handleLookup(
 
 	const entity: PSGCEntity = JSON.parse(raw);
 	return {
-		content: [{ type: "text", text: JSON.stringify(entity, null, 2) }],
+		content: [
+			{
+				type: "text",
+				text: JSON.stringify(wrapResponse(toApiEntity(entity), meta), null, 2),
+			},
+		],
 	};
 }
 
 // ── Tool 2: search ─────────────────────────────────────────────────
 
 export async function handleSearch(
-	args: { query: string; level?: PSGCLevel; limit?: number },
+	args: { query: string; level?: PSGCLevel; limit?: number; strict?: boolean },
 	kv: KVGet,
 	cache: SearchCache,
+	meta: ApiMeta,
 ): Promise<ToolResult> {
 	if (!cache.current) {
 		const raw = await kv.get(KV_PREFIX.searchIndex);
@@ -66,24 +75,31 @@ export async function handleSearch(
 
 	const normalizedQuery = normalize(args.query);
 	const maxResults = args.limit ?? 10;
+	const strict = args.strict ?? false;
 
 	type ScoredEntry = SearchIndexEntry & { score: number };
 	const matches: ScoredEntry[] = [];
 
 	for (const entry of cache.current!) {
 		if (args.level && entry.l !== args.level) continue;
-		if (!entry.n.includes(normalizedQuery)) continue;
 
-		let score = 0;
-		if (entry.n === normalizedQuery) {
-			score = 3;
-		} else if (entry.n.startsWith(normalizedQuery)) {
-			score = 2;
+		if (strict) {
+			if (entry.n !== normalizedQuery) continue;
+			matches.push({ ...entry, score: 3 });
 		} else {
-			score = 1;
-		}
+			if (!entry.n.includes(normalizedQuery)) continue;
 
-		matches.push({ ...entry, score });
+			let score = 0;
+			if (entry.n === normalizedQuery) {
+				score = 3;
+			} else if (entry.n.startsWith(normalizedQuery)) {
+				score = 2;
+			} else {
+				score = 1;
+			}
+
+			matches.push({ ...entry, score });
+		}
 	}
 
 	matches.sort((a, b) => {
@@ -97,14 +113,26 @@ export async function handleSearch(
 		level: m.l,
 	}));
 
+	if (results.length === 0) {
+		return {
+			content: [
+				{
+					type: "text",
+					text: `No results found for "${args.query}"${args.level ? ` at level ${args.level}` : ""}`,
+				},
+			],
+		};
+	}
+
 	return {
 		content: [
 			{
 				type: "text",
-				text:
-					results.length > 0
-						? JSON.stringify(results, null, 2)
-						: `No results found for "${args.query}"${args.level ? ` at level ${args.level}` : ""}`,
+				text: JSON.stringify(
+					wrapResponse(results.map(toApiSearchResult), meta),
+					null,
+					2,
+				),
 			},
 		],
 	};
@@ -115,6 +143,7 @@ export async function handleSearch(
 export async function handleGetHierarchy(
 	args: { code: string },
 	kv: KVGet,
+	meta: ApiMeta,
 ): Promise<ToolResult> {
 	const entityRaw = await kv.get(`${KV_PREFIX.entity}:${args.code}`);
 	if (!entityRaw) {
@@ -166,7 +195,16 @@ export async function handleGetHierarchy(
 	}
 
 	return {
-		content: [{ type: "text", text: JSON.stringify(chain, null, 2) }],
+		content: [
+			{
+				type: "text",
+				text: JSON.stringify(
+					wrapResponse(chain.map(toApiEntity), meta),
+					null,
+					2,
+				),
+			},
+		],
 	};
 }
 
@@ -175,6 +213,7 @@ export async function handleGetHierarchy(
 export async function handleListChildren(
 	args: { code: string; level?: PSGCLevel },
 	kv: KVGet,
+	meta: ApiMeta,
 ): Promise<ToolResult> {
 	const childrenRaw = await kv.get(`${KV_PREFIX.children}:${args.code}`);
 	if (!childrenRaw) {
@@ -209,7 +248,11 @@ export async function handleListChildren(
 		content: [
 			{
 				type: "text",
-				text: JSON.stringify(entities, null, 2),
+				text: JSON.stringify(
+					wrapResponse(entities.map(toApiEntity), meta),
+					null,
+					2,
+				),
 			},
 		],
 	};
@@ -220,6 +263,7 @@ export async function handleListChildren(
 export async function handleListByType(
 	args: { level: PSGCLevel },
 	kv: KVGet,
+	meta: ApiMeta,
 ): Promise<ToolResult> {
 	const codesRaw = await kv.get(`${KV_PREFIX.type}:${args.level}`);
 	if (!codesRaw) {
@@ -253,7 +297,11 @@ export async function handleListByType(
 		content: [
 			{
 				type: "text",
-				text: JSON.stringify(entities, null, 2),
+				text: JSON.stringify(
+					wrapResponse(entities.map(toApiEntity), meta),
+					null,
+					2,
+				),
 			},
 		],
 	};

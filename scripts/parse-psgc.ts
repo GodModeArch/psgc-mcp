@@ -255,22 +255,15 @@ export async function parseExcelToEntities(
 			code,
 			name: rawName,
 			level,
+			oldName: cellStr(row, columns.oldName) ?? null,
+			cityClass: cellStr(row, columns.cityClass) ?? null,
+			incomeClass: cellStr(row, columns.incomeClass) ?? null,
+			urbanRural: cellStr(row, columns.urbanRural) ?? null,
+			population: cellNum(row, columns.population) ?? null,
+			parent: null,
+			regionCode: null,
+			provinceCode: null,
 		};
-
-		const oldName = cellStr(row, columns.oldName);
-		if (oldName) entity.oldName = oldName;
-
-		const cityClass = cellStr(row, columns.cityClass);
-		if (cityClass) entity.cityClass = cityClass;
-
-		const incomeClass = cellStr(row, columns.incomeClass);
-		if (incomeClass) entity.incomeClass = incomeClass;
-
-		const urbanRural = cellStr(row, columns.urbanRural);
-		if (urbanRural) entity.urbanRural = urbanRural;
-
-		const pop = cellNum(row, columns.population);
-		if (pop != null) entity.population = pop;
 
 		// Derive region and province codes
 		entity.regionCode = code.slice(0, 2) + "00000000";

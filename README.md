@@ -13,7 +13,7 @@ Public, read-only, no authentication required. Data sourced directly from the [P
 | Tool | Description |
 |------|-------------|
 | `lookup` | Fetch a geographic entity by its 10-digit PSGC code |
-| `search` | Search entities by name with optional level filter |
+| `search` | Search entities by name with optional level filter and strict mode |
 | `get_hierarchy` | Get the full administrative chain (barangay to region) |
 | `list_children` | List direct children of a parent entity |
 | `list_by_type` | List all entities at a given geographic level |
@@ -30,6 +30,57 @@ Public, read-only, no authentication required. Data sourced directly from the [P
 | `SubMun` | Sub-Municipality (Manila only) | 16 |
 | `SGU` | Special Geographic Unit (BARMM) | ~8 |
 | `Bgy` | Barangay | ~42,000 |
+
+## Response Format
+
+All data responses are wrapped in a standard envelope:
+
+```json
+{
+  "_meta": {
+    "dataset_version": "PSGC Q4 2025",
+    "dataset_date": "2025-12-31",
+    "last_synced": "2026-03-02",
+    "source": "Philippine Statistics Authority (PSA)",
+    "source_url": "https://psa.gov.ph/classification/psgc/"
+  },
+  "data": { ... }
+}
+```
+
+Error responses (`isError: true`) and informational messages (e.g. "No children found") are returned as plain text without wrapping.
+
+### Entity Schema
+
+Entity objects returned by `lookup`, `get_hierarchy`, `list_children`, and `list_by_type` use snake_case field names:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `psgc_code` | `string` | 10-digit PSGC code |
+| `name` | `string` | Official place name |
+| `level` | `string` | Geographic level (Reg, Prov, Dist, City, Mun, SubMun, SGU, Bgy) |
+| `old_name` | `string \| null` | Previous name, if renamed |
+| `city_class` | `string \| null` | City classification: HUC, ICC, CC, or null |
+| `income_class` | `string \| null` | Income classification (1st through 6th) |
+| `urban_rural` | `string \| null` | Urban/Rural classification (barangays only) |
+| `population` | `number \| null` | 2024 Census population count |
+| `parent_code` | `string \| null` | PSGC code of parent entity |
+
+All fields are always present. Fields without data are `null`, never omitted.
+
+### Search Results
+
+The `search` tool returns a lighter result object:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `psgc_code` | `string` | 10-digit PSGC code |
+| `name` | `string` | Official place name |
+| `level` | `string` | Geographic level |
+
+### Strict Search
+
+The `search` tool accepts an optional `strict` boolean parameter. When `strict: true`, only exact name matches are returned (after normalization). Partial and substring matches are excluded. Useful when you know the exact place name and want to avoid ambiguous results.
 
 ## Connect
 
@@ -79,11 +130,24 @@ Known edge cases:
 - Cotabato City is administratively in BARMM but geographically in Region XII — it appears under `Prov` code `124700000` (Maguindanao del Norte)
 - BARMM Special Geographic Units (`SGU`) don't follow the standard hierarchy and have no Province parent
 
-## Data Source
+## Data Sources
 
-Data is sourced directly from the **Philippine Statistics Authority (PSA)** quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/).
+| Source | Vintage | Description |
+|--------|---------|-------------|
+| [PSA PSGC Publication](https://psa.gov.ph/classification/psgc/) | Q4 2025 (January 13, 2026) | Geographic codes, names, levels, classifications |
+| [2024 Census of Population](https://psa.gov.ph/population-and-housing) | Proclamation No. 973 | Population counts per entity |
+| PSA PSGC Old Names column | Q4 2025 | Historical/previous place names |
+| PSA PSGC Urban/Rural column | Q4 2025 | Barangay urban/rural classification |
 
-Currently serving **Q4 2025** PSGC data (dated 13 January 2026), including population counts from the **2024 Census of Population** (Proclamation No. 973). Last synced: March 2, 2026.
+Last synced: March 2, 2026.
+
+## Breaking Changes (v1.1.0)
+
+- All data responses are now wrapped in `{ _meta, data }`. Consumers must unwrap `data` from the response.
+- Entity field names changed to snake_case: `code` is now `psgc_code`, `parent` is now `parent_code`, `cityClass` is now `city_class`, etc.
+- Search results use `psgc_code` instead of `code`.
+- All entity fields are always present. Previously optional fields now appear as `null` instead of being omitted.
+- Internal fields `regionCode` and `provinceCode` are no longer exposed in API responses.
 
 ## Related Projects
 

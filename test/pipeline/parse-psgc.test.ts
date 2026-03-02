@@ -120,7 +120,19 @@ describe("resolveParents", () => {
 		code: string,
 		level: PSGCEntity["level"],
 	): PSGCEntity {
-		return { code, name: `Entity ${code}`, level };
+		return {
+			code,
+			name: `Entity ${code}`,
+			level,
+			oldName: null,
+			cityClass: null,
+			incomeClass: null,
+			urbanRural: null,
+			population: null,
+			parent: null,
+			regionCode: null,
+			provinceCode: null,
+		};
 	}
 
 	it("assigns province parent to its region", () => {
@@ -139,7 +151,7 @@ describe("resolveParents", () => {
 
 		resolveParents(entities);
 
-		expect(entities.get("0300000000")!.parent).toBeUndefined();
+		expect(entities.get("0300000000")!.parent).toBeNull();
 	});
 
 	it("HUC falls back to district when province code doesn't exist", () => {

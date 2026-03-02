@@ -12,14 +12,14 @@ export interface PSGCEntity {
 	code: string;
 	name: string;
 	level: PSGCLevel;
-	oldName?: string;
-	cityClass?: string;
-	incomeClass?: string;
-	urbanRural?: string;
-	population?: number;
-	parent?: string;
-	regionCode?: string;
-	provinceCode?: string;
+	oldName: string | null;
+	cityClass: string | null;
+	incomeClass: string | null;
+	urbanRural: string | null;
+	population: number | null;
+	parent: string | null;
+	regionCode: string | null;
+	provinceCode: string | null;
 }
 
 export interface SearchIndexEntry {
