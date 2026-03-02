@@ -186,12 +186,11 @@ export function resolveParents(entities: Map<string, PSGCEntity>): void {
 	}
 }
 
-// ── Main parse function ──────────────────────────────────────────────
+// ── Shared Excel-to-entities parser ──────────────────────────────────
 
-async function main() {
-	const excelPath = findExcelFile();
-	console.log(`Reading: ${excelPath}`);
-
+export async function parseExcelToEntities(
+	excelPath: string,
+): Promise<Map<string, PSGCEntity>> {
 	const workbook = new ExcelJS.Workbook();
 	await workbook.xlsx.readFile(excelPath);
 
@@ -208,10 +207,8 @@ async function main() {
 		worksheet = workbook.worksheets[0];
 	}
 	if (!worksheet) {
-		console.error("No worksheet found in workbook.");
-		process.exit(1);
+		throw new Error("No worksheet found in workbook.");
 	}
-	console.log(`Worksheet: "${worksheet.name}" (${worksheet.rowCount} rows)`);
 
 	// Detect header row (scan first 10 rows for one containing "10-digit" or "PSGC")
 	let columns: ColumnMap | null = null;
@@ -233,15 +230,12 @@ async function main() {
 	}
 
 	if (!columns) {
-		console.error("Could not find header row in first 10 rows.");
-		process.exit(1);
+		throw new Error("Could not find header row in first 10 rows.");
 	}
-	console.log(`Header row: ${headerRowNum}, columns:`, columns);
 
 	// ── Parse all data rows ────────────────────────────────────────
 
 	const entities = new Map<string, PSGCEntity>();
-	let skipped = 0;
 
 	for (let r = headerRowNum + 1; r <= worksheet.rowCount; r++) {
 		const row = worksheet.getRow(r);
@@ -249,22 +243,13 @@ async function main() {
 		const rawName = cellStr(row, columns.name);
 		const rawLevel = cellStr(row, columns.level);
 
-		if (!rawCode || !rawName || !rawLevel) {
-			skipped++;
-			continue;
-		}
+		if (!rawCode || !rawName || !rawLevel) continue;
 
 		const level = parseLevel(rawLevel);
-		if (!level) {
-			skipped++;
-			continue;
-		}
+		if (!level) continue;
 
 		const code = padCode(rawCode);
-		if (code.length !== 10) {
-			skipped++;
-			continue;
-		}
+		if (code.length !== 10) continue;
 
 		const entity: PSGCEntity = {
 			code,
@@ -296,7 +281,17 @@ async function main() {
 		entities.set(code, entity);
 	}
 
-	console.log(`Parsed: ${entities.size} entities, skipped: ${skipped} rows`);
+	return entities;
+}
+
+// ── Main parse function ──────────────────────────────────────────────
+
+async function main() {
+	const excelPath = findExcelFile();
+	console.log(`Reading: ${excelPath}`);
+
+	const entities = await parseExcelToEntities(excelPath);
+	console.log(`Parsed: ${entities.size} entities`);
 
 	// ── Derive parent codes ────────────────────────────────────────
 
