@@ -173,4 +173,7 @@ dist
 
 # PSGC data files
 scripts/data/*.xlsx
+scripts/data/*/*.xlsx
+scripts/data/*/*.pdf
+scripts/data/**/*:Zone.Identifier
 scripts/data/output/
