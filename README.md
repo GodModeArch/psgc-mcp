@@ -83,7 +83,7 @@ Known edge cases:
 
 Data is sourced directly from the **Philippine Statistics Authority (PSA)** quarterly PSGC publication at [psa.gov.ph/classification/psgc](https://psa.gov.ph/classification/psgc/).
 
-Currently serving **Q3 2025** data (as of 30 September 2025), with population counts from the **2024 Census of Population** (Proclamation No. 973). Last synced: March 1, 2026.
+Currently serving **Q4 2025** PSGC data (dated 13 January 2026), including population counts from the **2024 Census of Population** (Proclamation No. 973). Last synced: March 2, 2026.
 
 ## Related Projects
 
@@ -109,21 +109,29 @@ The PSGC data is parsed from PSA's Excel publication and stored in Cloudflare KV
 
 Get the latest publication from [PSA PSGC](https://psa.gov.ph/classification/psgc) and place it in `scripts/data/`.
 
-### 2. Parse
+### 2. Diff (optional)
+
+```bash
+npm run diff-psgc -- "scripts/data/Q3 2025/PSGC-3Q-2025-Publication-Datafile.xlsx" "scripts/data/PSGC-4Q-2025-Publication-Datafile (1).xlsx"
+```
+
+Compares two quarterly Excel files and reports additions, removals, name changes, and field changes. Run this before the full parse to verify PSA's changelog.
+
+### 3. Parse
 ```bash
 npm run parse-psgc
 ```
 
 Reads the Excel file, derives parent relationships, and writes chunked JSON files to `scripts/data/output/`.
 
-### 3. Upload to KV
+### 4. Upload to KV
 ```bash
 npm run upload-kv
 ```
 
 Bulk uploads all JSON chunks to Cloudflare KV via wrangler.
 
-### 4. Deploy
+### 5. Deploy
 ```bash
 npm run deploy
 ```
