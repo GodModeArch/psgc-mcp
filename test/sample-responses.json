@@ -1,0 +1,759 @@
+{
+  "generated_at": "2026-03-03T10:58:01.637Z",
+  "test_dataset": "Fixture entities (NCR, Central Luzon, MIMAROPA, Manila, Bulacan, etc.)",
+  "api_version": "1.1.0",
+  "total_cases": 25,
+  "cases": [
+    {
+      "tool": "lookup",
+      "description": "Fetch a highly-urbanized city (City of Manila)",
+      "args": {
+        "code": "1301006000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "psgc_code": "1301006000",
+          "name": "City of Manila",
+          "level": "City",
+          "old_name": null,
+          "city_class": "HUC",
+          "income_class": null,
+          "urban_rural": null,
+          "population": 1846513,
+          "parent_code": "1301000000"
+        }
+      }
+    },
+    {
+      "tool": "lookup",
+      "description": "Fetch a barangay with urban_rural classification",
+      "args": {
+        "code": "0314024001"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "psgc_code": "0314024001",
+          "name": "Abangan Norte",
+          "level": "Bgy",
+          "old_name": null,
+          "city_class": null,
+          "income_class": null,
+          "urban_rural": "Urban",
+          "population": null,
+          "parent_code": "0314024000"
+        }
+      }
+    },
+    {
+      "tool": "lookup",
+      "description": "Fetch a region (top-level, no parent)",
+      "args": {
+        "code": "1300000000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "psgc_code": "1300000000",
+          "name": "National Capital Region",
+          "level": "Reg",
+          "old_name": null,
+          "city_class": null,
+          "income_class": null,
+          "urban_rural": null,
+          "population": 13484462,
+          "parent_code": null
+        }
+      }
+    },
+    {
+      "tool": "lookup",
+      "description": "Fetch a province with income_class populated",
+      "args": {
+        "code": "0314000000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "psgc_code": "0314000000",
+          "name": "Bulacan",
+          "level": "Prov",
+          "old_name": null,
+          "city_class": null,
+          "income_class": "1st",
+          "urban_rural": null,
+          "population": null,
+          "parent_code": "0300000000"
+        }
+      }
+    },
+    {
+      "tool": "lookup",
+      "description": "Fetch a Special Geographic Unit (Kalayaan Islands)",
+      "args": {
+        "code": "9900100000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "psgc_code": "9900100000",
+          "name": "Kalayaan Islands",
+          "level": "SGU",
+          "old_name": null,
+          "city_class": null,
+          "income_class": null,
+          "urban_rural": null,
+          "population": null,
+          "parent_code": "1700000000"
+        }
+      }
+    },
+    {
+      "tool": "lookup",
+      "description": "Error: non-existent PSGC code",
+      "args": {
+        "code": "0000000000"
+      },
+      "response": "No entity found for PSGC code 0000000000",
+      "isError": true
+    },
+    {
+      "tool": "search",
+      "description": "Broad search for 'Manila' (matches city, district, sub-municipalities)",
+      "args": {
+        "query": "Manila"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "1301006000",
+            "name": "City of Manila",
+            "level": "City"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "search",
+      "description": "Search for 'Malolos' filtered to City level only",
+      "args": {
+        "query": "Malolos",
+        "level": "City"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314009000",
+            "name": "City of Malolos",
+            "level": "City"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "search",
+      "description": "Strict search: only exact normalized name matches",
+      "args": {
+        "query": "Marilao",
+        "strict": true
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314024000",
+            "name": "Marilao",
+            "level": "Mun"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "search",
+      "description": "Diacritic-insensitive: 'nono' matches 'Ñoño'",
+      "args": {
+        "query": "nono"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314024099",
+            "name": "Ñoño",
+            "level": "Bgy"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "search",
+      "description": "Search with limit=3 (letter 'a' matches many entities)",
+      "args": {
+        "query": "a",
+        "limit": 3
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314024001",
+            "name": "Abangan Norte",
+            "level": "Bgy"
+          },
+          {
+            "psgc_code": "0314024002",
+            "name": "Barangay 002",
+            "level": "Bgy"
+          },
+          {
+            "psgc_code": "0314024003",
+            "name": "Barangay 003",
+            "level": "Bgy"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "search",
+      "description": "No results found (informational, not an error)",
+      "args": {
+        "query": "Atlantis"
+      },
+      "response": "No results found for \"Atlantis\""
+    },
+    {
+      "tool": "search",
+      "description": "Strict mode: partial match 'Man' does NOT match 'Manila'",
+      "args": {
+        "query": "Man",
+        "strict": true
+      },
+      "response": "No results found for \"Man\""
+    },
+    {
+      "tool": "get_hierarchy",
+      "description": "Full chain: Abangan Norte (Bgy) -> Marilao (Mun) -> Bulacan (Prov) -> Central Luzon (Reg)",
+      "args": {
+        "code": "0314024001"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314024001",
+            "name": "Abangan Norte",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "Urban",
+            "population": null,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024000",
+            "name": "Marilao",
+            "level": "Mun",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 234572,
+            "parent_code": "0314000000"
+          },
+          {
+            "psgc_code": "0314000000",
+            "name": "Bulacan",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0300000000"
+          },
+          {
+            "psgc_code": "0300000000",
+            "name": "Central Luzon",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 12422172,
+            "parent_code": null
+          }
+        ]
+      }
+    },
+    {
+      "tool": "get_hierarchy",
+      "description": "Manila (City) -> NCR First District (Dist) -> NCR (Reg)",
+      "args": {
+        "code": "1301006000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "1301006000",
+            "name": "City of Manila",
+            "level": "City",
+            "old_name": null,
+            "city_class": "HUC",
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1846513,
+            "parent_code": "1301000000"
+          },
+          {
+            "psgc_code": "1301000000",
+            "name": "NCR, First District",
+            "level": "Dist",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "1300000000"
+          },
+          {
+            "psgc_code": "1300000000",
+            "name": "National Capital Region",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 13484462,
+            "parent_code": null
+          }
+        ]
+      }
+    },
+    {
+      "tool": "get_hierarchy",
+      "description": "NCR Region is already top-level; returns single-element array",
+      "args": {
+        "code": "1300000000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "1300000000",
+            "name": "National Capital Region",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 13484462,
+            "parent_code": null
+          }
+        ]
+      }
+    },
+    {
+      "tool": "get_hierarchy",
+      "description": "Error: non-existent code",
+      "args": {
+        "code": "0000000000"
+      },
+      "response": "No entity found for PSGC code 0000000000",
+      "isError": true
+    },
+    {
+      "tool": "list_children",
+      "description": "Children of Bulacan: City of Malolos + Marilao",
+      "args": {
+        "code": "0314000000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314009000",
+            "name": "City of Malolos",
+            "level": "City",
+            "old_name": null,
+            "city_class": "CC",
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0314000000"
+          },
+          {
+            "psgc_code": "0314024000",
+            "name": "Marilao",
+            "level": "Mun",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 234572,
+            "parent_code": "0314000000"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_children",
+      "description": "Children of Marilao: barangays (Abangan Norte, Ñoño, generated bgys)",
+      "args": {
+        "code": "0314024000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314024001",
+            "name": "Abangan Norte",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "Urban",
+            "population": null,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024002",
+            "name": "Barangay 002",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024003",
+            "name": "Barangay 003",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024004",
+            "name": "Barangay 004",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024005",
+            "name": "Barangay 005",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024006",
+            "name": "Barangay 006",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024099",
+            "name": "Ñoño",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0314024000"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_children",
+      "description": "NCR children filtered to City level only (Quezon City)",
+      "args": {
+        "code": "1300000000",
+        "level": "City"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "1307404000",
+            "name": "Quezon City",
+            "level": "City",
+            "old_name": null,
+            "city_class": "HUC",
+            "income_class": null,
+            "urban_rural": null,
+            "population": 2960048,
+            "parent_code": "1300000000"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_children",
+      "description": "Barangay has no children (leaf level)",
+      "args": {
+        "code": "0314024001"
+      },
+      "response": "No children found for PSGC code 0314024001. It may be a barangay (leaf level) or the code may be invalid."
+    },
+    {
+      "tool": "list_by_type",
+      "description": "All regions in the dataset",
+      "args": {
+        "level": "Reg"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0300000000",
+            "name": "Central Luzon",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 12422172,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1300000000",
+            "name": "National Capital Region",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 13484462,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1700000000",
+            "name": "MIMAROPA Region",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": null
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_by_type",
+      "description": "All provinces in the dataset",
+      "args": {
+        "level": "Prov"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314000000",
+            "name": "Bulacan",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "0300000000"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_by_type",
+      "description": "All municipalities in the dataset",
+      "args": {
+        "level": "Mun"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0314024000",
+            "name": "Marilao",
+            "level": "Mun",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 234572,
+            "parent_code": "0314000000"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_by_type",
+      "description": "All SGUs (e.g., Kalayaan Islands)",
+      "args": {
+        "level": "SGU"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "9900100000",
+            "name": "Kalayaan Islands",
+            "level": "SGU",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": null,
+            "parent_code": "1700000000"
+          }
+        ]
+      }
+    }
+  ]
+}
