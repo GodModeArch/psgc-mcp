@@ -6,8 +6,6 @@
  */
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import Database from "better-sqlite3";
-
 import {
 	handleLookup,
 	handleSearch,
@@ -19,24 +17,7 @@ import type { ToolResult, SearchCache } from "../src/tool-handlers";
 import { buildMeta } from "../src/response";
 import type { ApiMeta } from "../src/response";
 
-// ── Load real KV data from wrangler's local SQLite ──────────────────
-
-const KV_DIR = join(
-	__dirname,
-	"..",
-	".wrangler",
-	"state",
-	"v3",
-	"kv",
-	"63ece634783742fe9dbab5b92f2040e7",
-);
-
-// Miniflare v3 stores KV in SQLite
-const dbPath = join(KV_DIR, "blobs");
-
-// Actually, miniflare stores as flat files in blobs/ keyed by hash,
-// with a SQLite db mapping keys -> blob refs. Let's find the SQLite db.
-// The structure is: .wrangler/state/v3/kv/<ns_id>/ with a .sqlite file
+// ── Load real KV data from parsed output files ──────────────────────
 
 async function loadKVFromFiles(): Promise<Map<string, string>> {
 	const kvMap = new Map<string, string>();

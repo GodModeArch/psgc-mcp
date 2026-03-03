@@ -50,11 +50,11 @@ echo '  "server": "localhost:8787 (wrangler dev, local KV)",'
 echo '  "cases": ['
 
 # 1) Lookup: City of Manila
-call_mcp 1 "lookup" '{"code":"1301006000"}' "Lookup: City of Manila (HUC)"
+call_mcp 1 "lookup" '{"code":"1380600000"}' "Lookup: City of Manila (HUC)"
 echo ","
 
 # 2) Lookup: Quezon City
-call_mcp 2 "lookup" '{"code":"1307404000"}' "Lookup: Quezon City"
+call_mcp 2 "lookup" '{"code":"1381300000"}' "Lookup: Quezon City"
 echo ","
 
 # 3) Search: Manila (broad)
@@ -70,7 +70,7 @@ call_mcp 5 "search" '{"query":"Davao","level":"City"}' "Search: Davao filtered t
 echo ","
 
 # 6) Hierarchy: a barangay in Makati
-call_mcp 6 "get_hierarchy" '{"code":"1307601001"}' "Hierarchy: Bangkal barangay up to NCR region"
+call_mcp 6 "get_hierarchy" '{"code":"1380300001"}' "Hierarchy: Bangkal barangay up to NCR region"
 echo ","
 
 # 7) List children: Region III (Central Luzon) provinces
@@ -78,7 +78,7 @@ call_mcp 7 "list_children" '{"code":"0300000000","level":"Prov"}' "Children: Cen
 echo ","
 
 # 8) List children: Bulacan cities/municipalities
-call_mcp 8 "list_children" '{"code":"0314000000"}' "Children: Bulacan cities and municipalities"
+call_mcp 8 "list_children" '{"code":"0301400000"}' "Children: Bulacan cities and municipalities"
 echo ","
 
 # 9) List by type: all regions
