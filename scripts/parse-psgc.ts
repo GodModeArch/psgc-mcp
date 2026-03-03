@@ -73,13 +73,22 @@ interface ColumnMap {
 	population: number;
 }
 
+function cellText(cell: ExcelJS.Cell): string {
+	const v = cell.value;
+	if (v == null) return "";
+	if (typeof v === "object" && "richText" in v) {
+		return (v as ExcelJS.CellRichTextValue).richText
+			.map((r) => r.text)
+			.join("");
+	}
+	return String(v);
+}
+
 function detectColumns(headerRow: ExcelJS.Row): ColumnMap {
 	const map: Partial<ColumnMap> = {};
 
 	headerRow.eachCell({ includeEmpty: false }, (cell, colNumber) => {
-		const val = String(cell.value ?? "")
-			.toLowerCase()
-			.trim();
+		const val = cellText(cell).toLowerCase().replace(/\s+/g, " ").trim();
 
 		if (val.includes("10-digit") || val.includes("psgc")) {
 			map.code = colNumber;

@@ -1,0 +1,2417 @@
+{
+  "generated_at": "2026-03-03T10:58:08.258Z",
+  "data_source": "Real PSGC Q4 2025 parsed data (scripts/data/output/*.json)",
+  "api_version": "1.1.0",
+  "total_cases": 10,
+  "cases": [
+    {
+      "case_number": 1,
+      "tool": "lookup",
+      "description": "City of Manila - Highly Urbanized City in NCR",
+      "args": {
+        "code": "1380600000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "psgc_code": "1380600000",
+          "name": "City of Manila",
+          "level": "City",
+          "old_name": null,
+          "city_class": "HUC",
+          "income_class": "1st",
+          "urban_rural": null,
+          "population": 1902590,
+          "parent_code": "1300000000"
+        }
+      }
+    },
+    {
+      "case_number": 2,
+      "tool": "lookup",
+      "description": "Quezon City - most populous city in the Philippines",
+      "args": {
+        "code": "1381300000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "psgc_code": "1381300000",
+          "name": "Quezon City",
+          "level": "City",
+          "old_name": null,
+          "city_class": "HUC",
+          "income_class": "1st",
+          "urban_rural": null,
+          "population": 3084270,
+          "parent_code": "1381000000"
+        }
+      }
+    },
+    {
+      "case_number": 3,
+      "tool": "search",
+      "description": "Search for Cebu filtered to Province level",
+      "args": {
+        "query": "Cebu",
+        "level": "Prov"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0702200000",
+            "name": "Cebu",
+            "level": "Prov"
+          }
+        ]
+      }
+    },
+    {
+      "case_number": 4,
+      "tool": "search",
+      "description": "Search for Davao filtered to City level",
+      "args": {
+        "query": "Davao",
+        "level": "City"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "1130700000",
+            "name": "City of Davao",
+            "level": "City"
+          }
+        ]
+      }
+    },
+    {
+      "case_number": 5,
+      "tool": "search",
+      "description": "Broad search for Manila - matches city, district, sub-municipalities, barangays",
+      "args": {
+        "query": "Manila",
+        "limit": 5
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0500515024",
+            "name": "Manila",
+            "level": "Bgy"
+          },
+          {
+            "psgc_code": "1630400065",
+            "name": "Manila de Bugabus",
+            "level": "Bgy"
+          },
+          {
+            "psgc_code": "1903630026",
+            "name": "Manila Group",
+            "level": "Bgy"
+          },
+          {
+            "psgc_code": "0907330013",
+            "name": "Manilan",
+            "level": "Bgy"
+          },
+          {
+            "psgc_code": "0806002011",
+            "name": "Canmanila",
+            "level": "Bgy"
+          }
+        ]
+      }
+    },
+    {
+      "case_number": 6,
+      "tool": "get_hierarchy",
+      "description": "Full admin chain from Bangkal (Makati barangay) up to NCR region",
+      "args": {
+        "code": "1380300001"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "1380300001",
+            "name": "Bangkal",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 18013,
+            "parent_code": "1380300000"
+          },
+          {
+            "psgc_code": "1380300000",
+            "name": "City of Makati",
+            "level": "City",
+            "old_name": null,
+            "city_class": "HUC",
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": 309770,
+            "parent_code": "1300000000"
+          },
+          {
+            "psgc_code": "1300000000",
+            "name": "National Capital Region (NCR)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 14001751,
+            "parent_code": null
+          }
+        ]
+      }
+    },
+    {
+      "case_number": 7,
+      "tool": "list_children",
+      "description": "All provinces under Region III (Central Luzon)",
+      "args": {
+        "code": "0300000000",
+        "level": "Prov"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0300800000",
+            "name": "Bataan",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": 891440,
+            "parent_code": "0300000000"
+          },
+          {
+            "psgc_code": "0301400000",
+            "name": "Bulacan",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": 3876806,
+            "parent_code": "0300000000"
+          },
+          {
+            "psgc_code": "0304900000",
+            "name": "Nueva Ecija",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": 2395816,
+            "parent_code": "0300000000"
+          },
+          {
+            "psgc_code": "0305400000",
+            "name": "Pampanga",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": 2586446,
+            "parent_code": "0300000000"
+          },
+          {
+            "psgc_code": "0306900000",
+            "name": "Tarlac",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": 1568162,
+            "parent_code": "0300000000"
+          },
+          {
+            "psgc_code": "0307100000",
+            "name": "Zambales",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "1st",
+            "urban_rural": null,
+            "population": 681225,
+            "parent_code": "0300000000"
+          },
+          {
+            "psgc_code": "0307700000",
+            "name": "Aurora",
+            "level": "Prov",
+            "old_name": null,
+            "city_class": null,
+            "income_class": "2nd",
+            "urban_rural": null,
+            "population": 240824,
+            "parent_code": "0300000000"
+          }
+        ]
+      }
+    },
+    {
+      "case_number": 8,
+      "tool": "list_children",
+      "description": "All cities and municipalities in Bulacan",
+      "args": {
+        "code": "0301400000"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0301401001",
+            "name": "Banaban",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2408,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401002",
+            "name": "Baybay",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 944,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401003",
+            "name": "Binagbag",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5673,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401005",
+            "name": "Donacion",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3092,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401006",
+            "name": "Encanto",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5261,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401007",
+            "name": "Laog",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1910,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401008",
+            "name": "Marungko",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5636,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401009",
+            "name": "Niugan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5397,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401010",
+            "name": "Paltok",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1772,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401013",
+            "name": "Pulong Yantok",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6240,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401014",
+            "name": "San Roque",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4843,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401015",
+            "name": "Santa Cruz",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5979,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401016",
+            "name": "Santa Lucia",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2986,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401017",
+            "name": "Santo Cristo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5597,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401018",
+            "name": "Sulucan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6050,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301401019",
+            "name": "Taboc",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4074,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402002",
+            "name": "Borol 2nd",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8653,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402003",
+            "name": "Borol 1st",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 11055,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402004",
+            "name": "Dalig",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2247,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402005",
+            "name": "Longos",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2852,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402007",
+            "name": "Panginay",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 14719,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402008",
+            "name": "Pulong Gubat",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8424,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402009",
+            "name": "San Juan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 9490,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402010",
+            "name": "Santol",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 17692,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301402011",
+            "name": "Wawa",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5089,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403001",
+            "name": "Bagong Nayon",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4035,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403002",
+            "name": "Barangca",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3716,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403003",
+            "name": "Calantipay",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3774,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403004",
+            "name": "Catulinan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2203,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403005",
+            "name": "Concepcion",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 9582,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403006",
+            "name": "Hinukay",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2304,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403007",
+            "name": "Makinabang",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 12918,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403008",
+            "name": "Matangtubig",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3715,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403010",
+            "name": "Pagala",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8344,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403011",
+            "name": "Paitan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2226,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403012",
+            "name": "Piel",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2794,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403013",
+            "name": "Pinagbarilan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6527,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403014",
+            "name": "Poblacion",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 10975,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403016",
+            "name": "Sabang",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 12763,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403017",
+            "name": "San Jose",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6884,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403018",
+            "name": "San Roque",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4061,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403019",
+            "name": "Santa Barbara",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 12732,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403020",
+            "name": "Santo Cristo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 9767,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403021",
+            "name": "Santo Niño",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4455,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403022",
+            "name": "Subic",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6444,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403023",
+            "name": "Sulivan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6988,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403024",
+            "name": "Tangos",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 7943,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403025",
+            "name": "Tarcan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 9254,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403026",
+            "name": "Tiaong",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5958,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403027",
+            "name": "Tibag",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2949,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403028",
+            "name": "Tilapayong",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3413,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301403030",
+            "name": "Virgen delas Flores",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 7470,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404001",
+            "name": "Antipona",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1957,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404002",
+            "name": "Bagumbayan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3878,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404003",
+            "name": "Bambang",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8299,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404004",
+            "name": "Batia",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 45558,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404005",
+            "name": "Biñang 1st",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3379,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404006",
+            "name": "Biñang 2nd",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2220,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404007",
+            "name": "Bolacan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1650,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404008",
+            "name": "Bundukan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 11298,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404009",
+            "name": "Bunlo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4011,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404010",
+            "name": "Caingin",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4625,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404011",
+            "name": "Duhat",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 9209,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404012",
+            "name": "Igulot",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2027,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404013",
+            "name": "Lolomboy",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 13368,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404014",
+            "name": "Poblacion",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 1483,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404015",
+            "name": "Sulucan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2835,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404016",
+            "name": "Taal",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 9218,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404017",
+            "name": "Tambobong",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 7547,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404018",
+            "name": "Turo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 12944,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301404019",
+            "name": "Wakas",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2249,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405001",
+            "name": "Bagumbayan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4439,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405002",
+            "name": "Balubad",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 3858,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405003",
+            "name": "Bambang",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 14244,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405004",
+            "name": "Matungao",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 13759,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405005",
+            "name": "Maysantol",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2970,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405006",
+            "name": "Perez",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2005,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405007",
+            "name": "Pitpitan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5216,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405009",
+            "name": "San Francisco",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8297,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405010",
+            "name": "San Jose",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 3606,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405012",
+            "name": "San Nicolas",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 7094,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405013",
+            "name": "Santa Ana",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 7517,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405014",
+            "name": "Santa Ines",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2432,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405015",
+            "name": "Taliptip",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4472,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301405016",
+            "name": "Tibig",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3192,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406001",
+            "name": "Bonga Mayor",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6631,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406002",
+            "name": "Bonga Menor",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5553,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406003",
+            "name": "Buisan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1947,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406004",
+            "name": "Camachilihan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2631,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406005",
+            "name": "Cambaog",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6931,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406006",
+            "name": "Catacte",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8779,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406007",
+            "name": "Liciada",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6442,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406008",
+            "name": "Malamig",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8396,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406009",
+            "name": "Malawak",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3099,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406010",
+            "name": "Poblacion",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8426,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406011",
+            "name": "San Pedro",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8131,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406012",
+            "name": "Talampas",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3935,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406013",
+            "name": "Tanawan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2899,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301406014",
+            "name": "Tibagan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6765,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407001",
+            "name": "Balite",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5983,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407002",
+            "name": "Balungao",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5854,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407004",
+            "name": "Buguion",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3948,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407005",
+            "name": "Bulusan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2625,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407006",
+            "name": "Calizon",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2288,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407007",
+            "name": "Calumpang",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 3495,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407008",
+            "name": "Caniogan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4690,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407009",
+            "name": "Corazon",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2126,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407010",
+            "name": "Frances",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6335,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407011",
+            "name": "Gatbuca",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6583,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407012",
+            "name": "Gugo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2006,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407013",
+            "name": "Iba Este",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4198,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407014",
+            "name": "Iba O'Este",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 13638,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407015",
+            "name": "Longos",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4519,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407016",
+            "name": "Meysulao",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4307,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407017",
+            "name": "Meyto",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2988,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407018",
+            "name": "Palimbang",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1738,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407019",
+            "name": "Panducot",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2402,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407020",
+            "name": "Pio Cruzcosa",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4774,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407021",
+            "name": "Poblacion",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 1503,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407022",
+            "name": "Pungo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 9734,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407023",
+            "name": "San Jose",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5865,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407024",
+            "name": "San Marcos",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2758,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407025",
+            "name": "San Miguel",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6279,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407026",
+            "name": "Santa Lucia",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2554,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407027",
+            "name": "Santo Niño",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2626,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407028",
+            "name": "Sapang Bayan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3171,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407029",
+            "name": "Sergio Bayan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2070,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301407030",
+            "name": "Sucol",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1130,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408001",
+            "name": "Cutcut",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3763,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408002",
+            "name": "Daungan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2585,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408003",
+            "name": "Ilang-Ilang",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5852,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408004",
+            "name": "Malis",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 17422,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408005",
+            "name": "Panginay",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 2694,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408006",
+            "name": "Poblacion",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4294,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408007",
+            "name": "Pritil",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5357,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408008",
+            "name": "Pulong Gubat",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3128,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408009",
+            "name": "Santa Cruz",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 12198,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408010",
+            "name": "Santa Rita",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 16902,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408011",
+            "name": "Tabang",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 12476,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408012",
+            "name": "Tabe",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 9165,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408013",
+            "name": "Tiaong",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 10100,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301408015",
+            "name": "Tuktukan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 12237,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409001",
+            "name": "Abulalas",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 7387,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409002",
+            "name": "Carillo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1901,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409003",
+            "name": "Iba",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6773,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409004",
+            "name": "Mercado",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 7507,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409005",
+            "name": "Palapat",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 2490,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409006",
+            "name": "Pugad",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 1387,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409007",
+            "name": "Sagrada Familia",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6400,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409008",
+            "name": "San Agustin",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 10432,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409009",
+            "name": "San Isidro",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8844,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409011",
+            "name": "San Jose",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4433,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409012",
+            "name": "San Juan",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4283,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409013",
+            "name": "San Miguel",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6346,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409014",
+            "name": "San Nicolas",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 4496,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409015",
+            "name": "San Pablo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 3748,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409016",
+            "name": "San Pascual",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5449,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409017",
+            "name": "San Pedro",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 6533,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409018",
+            "name": "San Roque",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5429,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409019",
+            "name": "San Sebastian",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 7305,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409020",
+            "name": "Santa Cruz",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3074,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409021",
+            "name": "Santa Elena",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 5665,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409022",
+            "name": "Santa Monica",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 8039,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409023",
+            "name": "Santo Niño",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4477,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409024",
+            "name": "Santo Rosario",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "U",
+            "population": 4908,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409025",
+            "name": "Tampok",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3124,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409026",
+            "name": "Tibaguin",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3075,
+            "parent_code": "0301400000"
+          },
+          {
+            "psgc_code": "0301409027",
+            "name": "Iba-Ibayo",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "R",
+            "population": 3168,
+            "parent_code": "0301400000"
+          }
+        ]
+      }
+    },
+    {
+      "case_number": 9,
+      "tool": "list_by_type",
+      "description": "All 18 Philippine regions with population data",
+      "args": {
+        "level": "Reg"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0100000000",
+            "name": "Region I (Ilocos Region)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 5342453,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "0200000000",
+            "name": "Region II (Cagayan Valley)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 3777608,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "0300000000",
+            "name": "Region III (Central Luzon)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 12989074,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "0400000000",
+            "name": "Region IV-A (CALABARZON)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 16933234,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "0500000000",
+            "name": "Region V (Bicol Region)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 6064426,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "0600000000",
+            "name": "Region VI (Western Visayas)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 4861911,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "0700000000",
+            "name": "Region VII (Central Visayas)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 6640875,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "0800000000",
+            "name": "Region VIII (Eastern Visayas)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 4625929,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "0900000000",
+            "name": "Region IX (Zamboanga Peninsula)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 5089934,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1000000000",
+            "name": "Region X (Northern Mindanao)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 5178326,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1100000000",
+            "name": "Region XI (Davao Region)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 5389422,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1200000000",
+            "name": "Region XII (SOCCSKSARGEN)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 4462776,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1300000000",
+            "name": "National Capital Region (NCR)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 14001751,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1400000000",
+            "name": "Cordillera Administrative Region (CAR)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1808985,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1600000000",
+            "name": "Region XIII (Caraga)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 2865196,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1700000000",
+            "name": "MIMAROPA Region",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 3245446,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1800000000",
+            "name": "Negros Island Region (NIR)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 4904944,
+            "parent_code": null
+          },
+          {
+            "psgc_code": "1900000000",
+            "name": "Bangsamoro Autonomous Region In Muslim Mindanao (BARMM)",
+            "level": "Reg",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 4545486,
+            "parent_code": null
+          }
+        ]
+      }
+    },
+    {
+      "case_number": 10,
+      "tool": "search",
+      "description": "Strict exact-match search for Marilao",
+      "args": {
+        "query": "Marilao",
+        "strict": true
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": [
+          {
+            "psgc_code": "0301411000",
+            "name": "Marilao",
+            "level": "Mun"
+          }
+        ]
+      }
+    }
+  ]
+}
