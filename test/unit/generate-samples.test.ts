@@ -14,6 +14,8 @@ import {
 	handleGetHierarchy,
 	handleListChildren,
 	handleListByType,
+	handleBatchLookup,
+	handleQueryByPopulation,
 } from "../../src/tool-handlers";
 import { buildSeededKV } from "../fixtures/entities";
 import { TEST_META } from "../fixtures/meta";
@@ -329,13 +331,72 @@ describe("generate sample responses", () => {
 		});
 	});
 
+	// ── BATCH LOOKUP ────────────────────────────────────────────────
+
+	it("batch_lookup: multiple valid codes", async () => {
+		const args = { codes: ["1301006000", "1307404000", "0314000000"] };
+		const result = await handleBatchLookup(args, kv, TEST_META);
+		samples.push({
+			tool: "batch_lookup",
+			description: "Batch lookup: Manila, Quezon City, Bulacan (all found)",
+			args,
+			response: parseResponse(result),
+		});
+	});
+
+	it("batch_lookup: mix of valid and unknown codes", async () => {
+		const args = { codes: ["1301006000", "9999999999", "0314000000"] };
+		const result = await handleBatchLookup(args, kv, TEST_META);
+		samples.push({
+			tool: "batch_lookup",
+			description: "Batch lookup with one unknown code (null in position 1)",
+			args,
+			response: parseResponse(result),
+		});
+	});
+
+	// ── QUERY BY POPULATION ─────────────────────────────────────────
+
+	it("query_by_population: top cities by population", async () => {
+		const args = { level: "City" as const, sort: "desc" as const, limit: 5 };
+		const result = await handleQueryByPopulation(args, kv, TEST_META);
+		samples.push({
+			tool: "query_by_population",
+			description: "Top cities by population (descending, limit 5)",
+			args,
+			response: parseResponse(result),
+		});
+	});
+
+	it("query_by_population: cities within population range", async () => {
+		const args = { level: "City" as const, min_population: 200000, max_population: 500000 };
+		const result = await handleQueryByPopulation(args, kv, TEST_META);
+		samples.push({
+			tool: "query_by_population",
+			description: "Cities with population between 200K-500K",
+			args,
+			response: parseResponse(result),
+		});
+	});
+
+	it("query_by_population: barangays under a municipality", async () => {
+		const args = { level: "Bgy" as const, parent_code: "0314024000", sort: "desc" as const };
+		const result = await handleQueryByPopulation(args, kv, TEST_META);
+		samples.push({
+			tool: "query_by_population",
+			description: "Barangays under Marilao sorted by population",
+			args,
+			response: parseResponse(result),
+		});
+	});
+
 	// ── WRITE OUTPUT ─────────────────────────────────────────────────
 
 	it("writes all samples to file", () => {
 		const output = {
 			generated_at: new Date().toISOString(),
 			test_dataset: "Fixture entities (NCR, Central Luzon, MIMAROPA, Manila, Bulacan, etc.)",
-			api_version: "1.2.0",
+			api_version: "1.3.0",
 			total_cases: samples.length,
 			cases: samples,
 		};

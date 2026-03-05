@@ -213,6 +213,53 @@ describe("handleQueryByPopulation", () => {
 		expect(data.total_matching).toBeGreaterThanOrEqual(2);
 	});
 
+	// ── Error branches ───────────────────────────────────────────
+
+	it("returns error when type index is missing for non-Bgy level", async () => {
+		kv.delete("type:City");
+		const result = await handleQueryByPopulation(
+			{ level: "City" },
+			kv,
+			TEST_META,
+		);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("No type index found");
+	});
+
+	it("returns error when children index is missing for Bgy with parent_code", async () => {
+		const result = await handleQueryByPopulation(
+			{ level: "Bgy", parent_code: "9999999999" },
+			kv,
+			TEST_META,
+		);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("No children found");
+	});
+
+	it("caps limit at 100 even when higher value is passed", async () => {
+		kv = buildSeededKV(150); // 150 extra bgys + Abangan Norte = 151 bgys with population
+		const result = await handleQueryByPopulation(
+			{ level: "Bgy", parent_code: MARILAO.code, limit: 200 },
+			kv,
+			TEST_META,
+		);
+		const data = parseData<PopResult>(result);
+
+		// 150 generated (with population) + Abangan Norte = 151; Ñoño has null population so filtered
+		expect(data.total_matching).toBe(151);
+		expect(data.returned).toBe(100);
+	});
+
+	it("returns error when min_population exceeds max_population", async () => {
+		const result = await handleQueryByPopulation(
+			{ level: "City", min_population: 500000, max_population: 100000 },
+			kv,
+			TEST_META,
+		);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("cannot exceed");
+	});
+
 	// ── Metadata ──────────────────────────────────────────────────
 
 	it("wraps response with _meta", async () => {
