@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-05T10:19:43.666Z",
+  "generated_at": "2026-03-05T10:34:28.006Z",
   "test_dataset": "Fixture entities (NCR, Central Luzon, MIMAROPA, Manila, Bulacan, etc.)",
   "api_version": "1.3.0",
   "total_cases": 30,
@@ -264,13 +264,13 @@
             "level": "Bgy"
           },
           {
-            "psgc_code": "0314024002",
-            "name": "Barangay 002",
+            "psgc_code": "0314024200",
+            "name": "Barangay 200",
             "level": "Bgy"
           },
           {
-            "psgc_code": "0314024003",
-            "name": "Barangay 003",
+            "psgc_code": "0314024201",
+            "name": "Barangay 201",
             "level": "Bgy"
           }
         ]
@@ -511,61 +511,6 @@
             "parent_code": "0314024000"
           },
           {
-            "psgc_code": "0314024002",
-            "name": "Barangay 002",
-            "level": "Bgy",
-            "old_name": null,
-            "city_class": null,
-            "income_class": null,
-            "urban_rural": null,
-            "population": null,
-            "parent_code": "0314024000"
-          },
-          {
-            "psgc_code": "0314024003",
-            "name": "Barangay 003",
-            "level": "Bgy",
-            "old_name": null,
-            "city_class": null,
-            "income_class": null,
-            "urban_rural": null,
-            "population": null,
-            "parent_code": "0314024000"
-          },
-          {
-            "psgc_code": "0314024004",
-            "name": "Barangay 004",
-            "level": "Bgy",
-            "old_name": null,
-            "city_class": null,
-            "income_class": null,
-            "urban_rural": null,
-            "population": null,
-            "parent_code": "0314024000"
-          },
-          {
-            "psgc_code": "0314024005",
-            "name": "Barangay 005",
-            "level": "Bgy",
-            "old_name": null,
-            "city_class": null,
-            "income_class": null,
-            "urban_rural": null,
-            "population": null,
-            "parent_code": "0314024000"
-          },
-          {
-            "psgc_code": "0314024006",
-            "name": "Barangay 006",
-            "level": "Bgy",
-            "old_name": null,
-            "city_class": null,
-            "income_class": null,
-            "urban_rural": null,
-            "population": null,
-            "parent_code": "0314024000"
-          },
-          {
             "psgc_code": "0314024099",
             "name": "Ñoño",
             "level": "Bgy",
@@ -574,6 +519,61 @@
             "income_class": null,
             "urban_rural": null,
             "population": null,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024200",
+            "name": "Barangay 200",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1000,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024201",
+            "name": "Barangay 201",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1001,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024202",
+            "name": "Barangay 202",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1002,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024203",
+            "name": "Barangay 203",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1003,
+            "parent_code": "0314024000"
+          },
+          {
+            "psgc_code": "0314024204",
+            "name": "Barangay 204",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1004,
             "parent_code": "0314024000"
           }
         ]
@@ -985,10 +985,65 @@
               "urban_rural": "Urban",
               "population": 15238,
               "parent_code": "0314024000"
+            },
+            {
+              "psgc_code": "0314024204",
+              "name": "Barangay 204",
+              "level": "Bgy",
+              "old_name": null,
+              "city_class": null,
+              "income_class": null,
+              "urban_rural": null,
+              "population": 1004,
+              "parent_code": "0314024000"
+            },
+            {
+              "psgc_code": "0314024203",
+              "name": "Barangay 203",
+              "level": "Bgy",
+              "old_name": null,
+              "city_class": null,
+              "income_class": null,
+              "urban_rural": null,
+              "population": 1003,
+              "parent_code": "0314024000"
+            },
+            {
+              "psgc_code": "0314024202",
+              "name": "Barangay 202",
+              "level": "Bgy",
+              "old_name": null,
+              "city_class": null,
+              "income_class": null,
+              "urban_rural": null,
+              "population": 1002,
+              "parent_code": "0314024000"
+            },
+            {
+              "psgc_code": "0314024201",
+              "name": "Barangay 201",
+              "level": "Bgy",
+              "old_name": null,
+              "city_class": null,
+              "income_class": null,
+              "urban_rural": null,
+              "population": 1001,
+              "parent_code": "0314024000"
+            },
+            {
+              "psgc_code": "0314024200",
+              "name": "Barangay 200",
+              "level": "Bgy",
+              "old_name": null,
+              "city_class": null,
+              "income_class": null,
+              "urban_rural": null,
+              "population": 1000,
+              "parent_code": "0314024000"
             }
           ],
-          "total_matching": 1,
-          "returned": 1
+          "total_matching": 6,
+          "returned": 6
         }
       }
     }

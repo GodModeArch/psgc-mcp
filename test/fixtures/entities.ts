@@ -193,8 +193,9 @@ export const NONO_BGY: PSGCEntity = {
 
 export function generateMarilaoBarangays(count: number): PSGCEntity[] {
 	const bgys: PSGCEntity[] = [];
-	for (let i = 2; i <= count + 1; i++) {
-		const suffix = String(i).padStart(3, "0");
+	// Start at 200 to avoid collision with NONO_BGY fixture (0314024099)
+	for (let i = 0; i < count; i++) {
+		const suffix = String(200 + i).padStart(3, "0");
 		bgys.push({
 			code: `0314024${suffix}`,
 			name: `Barangay ${suffix}`,
@@ -203,7 +204,7 @@ export function generateMarilaoBarangays(count: number): PSGCEntity[] {
 			cityClass: null,
 			incomeClass: null,
 			urbanRural: null,
-			population: null,
+			population: 1000 + i,
 			parent: "0314024000",
 			regionCode: "0300000000",
 			provinceCode: "0314000000",
