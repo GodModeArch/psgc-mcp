@@ -1,5 +1,5 @@
 {
-	"name": "psgc-mcp",
+	"name": "@aaronzara/psgc-mcp",
 	"version": "1.3.0",
 	"private": false,
 	"description": "MCP server providing Philippine Standard Geographic Code (PSGC) data to AI agents. Data sourced directly from PSA quarterly publications.",
