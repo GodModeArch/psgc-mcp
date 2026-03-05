@@ -8,6 +8,8 @@ import {
 	handleGetHierarchy,
 	handleListChildren,
 	handleListByType,
+	handleBatchLookup,
+	handleQueryByPopulation,
 } from "./tool-handlers";
 import type { SearchCache } from "./tool-handlers";
 import { buildMeta } from "./response";
@@ -40,7 +42,7 @@ const LISTABLE_LEVELS: [PSGCLevel, ...PSGCLevel[]] = [
 export class PsgcMCP extends McpAgent {
 	server = new McpServer({
 		name: "PSGC",
-		version: "1.2.0",
+		version: "1.3.0",
 	});
 
 	async init() {
@@ -129,6 +131,69 @@ export class PsgcMCP extends McpAgent {
 					),
 			},
 			async ({ level }) => handleListByType({ level }, kv, meta),
+		);
+
+		// ── Tool 6: batch_lookup ────────────────────────────────────
+
+		this.server.tool(
+			"batch_lookup",
+			"Look up multiple PSGC entities in one call. Pass an array of 10-digit codes (max 50). Returns results in the same order as input, with null for codes not found.",
+			{
+				codes: z
+					.array(z.string().length(10))
+					.min(1)
+					.max(50)
+					.describe("Array of 10-digit PSGC codes (1-50)"),
+			},
+			async ({ codes }) => handleBatchLookup({ codes }, kv, meta),
+		);
+
+		// ── Tool 7: query_by_population ─────────────────────────────
+
+		this.server.tool(
+			"query_by_population",
+			"Query PSGC entities by population range. Returns entities sorted by population. Useful for finding the largest/smallest cities, municipalities, or provinces. Barangay queries require a parent_code to narrow scope.",
+			{
+				level: z
+					.enum(PSGC_LEVELS)
+					.describe("Geographic level to query"),
+				parent_code: z
+					.string()
+					.length(10)
+					.optional()
+					.describe(
+						"Filter to entities within this parent (required for Bgy). Uses code prefix matching.",
+					),
+				min_population: z
+					.number()
+					.int()
+					.min(0)
+					.optional()
+					.describe("Minimum population (inclusive)"),
+				max_population: z
+					.number()
+					.int()
+					.min(0)
+					.optional()
+					.describe("Maximum population (inclusive)"),
+				sort: z
+					.enum(["asc", "desc"])
+					.optional()
+					.describe("Sort order by population (default: desc)"),
+				limit: z
+					.number()
+					.int()
+					.min(1)
+					.max(100)
+					.optional()
+					.describe("Max results to return (default 10, max 100)"),
+			},
+			async ({ level, parent_code, min_population, max_population, sort, limit }) =>
+				handleQueryByPopulation(
+					{ level, parent_code, min_population, max_population, sort, limit },
+					kv,
+					meta,
+				),
 		);
 	}
 }

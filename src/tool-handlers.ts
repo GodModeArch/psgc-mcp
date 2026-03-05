@@ -306,3 +306,188 @@ export async function handleListByType(
 		],
 	};
 }
+
+// ── Tool 6: batch_lookup ──────────────────────────────────────────
+
+export async function handleBatchLookup(
+	args: { codes: string[] },
+	kv: KVGet,
+	meta: ApiMeta,
+): Promise<ToolResult> {
+	if (args.codes.length === 0) {
+		return {
+			content: [{ type: "text", text: "codes array must not be empty." }],
+			isError: true,
+		};
+	}
+
+	if (args.codes.length > 50) {
+		return {
+			content: [
+				{
+					type: "text",
+					text: `codes array exceeds maximum of 50 (received ${args.codes.length}).`,
+				},
+			],
+			isError: true,
+		};
+	}
+
+	const raws = await Promise.all(
+		args.codes.map((c) => kv.get(`${KV_PREFIX.entity}:${c}`)),
+	);
+
+	const results = raws.map((raw) =>
+		raw ? toApiEntity(JSON.parse(raw) as PSGCEntity) : null,
+	);
+
+	const found = results.filter((r) => r !== null).length;
+	const notFound = results.length - found;
+
+	return {
+		content: [
+			{
+				type: "text",
+				text: JSON.stringify(
+					wrapResponse({ results, found, not_found: notFound, total: results.length }, meta),
+					null,
+					2,
+				),
+			},
+		],
+	};
+}
+
+// ── Tool 7: query_by_population ───────────────────────────────────
+
+export async function handleQueryByPopulation(
+	args: {
+		level: PSGCLevel;
+		parent_code?: string;
+		min_population?: number;
+		max_population?: number;
+		sort?: "asc" | "desc";
+		limit?: number;
+	},
+	kv: KVGet,
+	meta: ApiMeta,
+): Promise<ToolResult> {
+	const {
+		level,
+		parent_code,
+		min_population,
+		max_population,
+		sort = "desc",
+		limit = 10,
+	} = args;
+
+	// Validation
+	if (
+		min_population !== undefined &&
+		max_population !== undefined &&
+		min_population > max_population
+	) {
+		return {
+			content: [
+				{
+					type: "text",
+					text: `min_population (${min_population}) cannot exceed max_population (${max_population}).`,
+				},
+			],
+			isError: true,
+		};
+	}
+
+	if (level === "Bgy" && !parent_code) {
+		return {
+			content: [
+				{
+					type: "text",
+					text: "parent_code is required when querying barangays (Bgy) by population. There are 42,000+ barangays; narrow the scope with a parent city/municipality code.",
+				},
+			],
+			isError: true,
+		};
+	}
+
+	// Get candidate codes
+	let codesRaw: string | null;
+	if (level === "Bgy") {
+		codesRaw = await kv.get(`${KV_PREFIX.children}:${parent_code}`);
+	} else {
+		codesRaw = await kv.get(`${KV_PREFIX.type}:${level}`);
+	}
+
+	if (!codesRaw) {
+		return {
+			content: [
+				{
+					type: "text",
+					text:
+						level === "Bgy"
+							? `No children found for parent code ${parent_code}.`
+							: `No type index found for level ${level}. Data may not be loaded yet.`,
+				},
+			],
+			isError: true,
+		};
+	}
+
+	const codes: string[] = JSON.parse(codesRaw);
+
+	// Derive parent prefix for filtering (strip trailing zeros)
+	const parentPrefix = parent_code
+		? parent_code.replace(/0+$/, "")
+		: undefined;
+
+	// Fetch entities in batches of 100 and filter
+	const matching: PSGCEntity[] = [];
+	for (let i = 0; i < codes.length; i += 100) {
+		const batch = codes.slice(i, i + 100);
+		const fetches = batch.map(async (c) => {
+			const raw = await kv.get(`${KV_PREFIX.entity}:${c}`);
+			return raw ? (JSON.parse(raw) as PSGCEntity) : null;
+		});
+		const results = await Promise.all(fetches);
+		for (const entity of results) {
+			if (!entity) continue;
+			if (entity.level !== level) continue;
+			if (entity.population === null) continue;
+			if (parentPrefix && level !== "Bgy" && !entity.code.startsWith(parentPrefix)) continue;
+			if (min_population !== undefined && entity.population < min_population) continue;
+			if (max_population !== undefined && entity.population > max_population) continue;
+			matching.push(entity);
+		}
+	}
+
+	// Sort by population
+	matching.sort((a, b) =>
+		sort === "asc"
+			? (a.population ?? 0) - (b.population ?? 0)
+			: (b.population ?? 0) - (a.population ?? 0),
+	);
+
+	const totalMatching = matching.length;
+	const effectiveLimit = Math.min(limit, 100);
+	const sliced = matching.slice(0, effectiveLimit);
+
+	return {
+		content: [
+			{
+				type: "text",
+				text: JSON.stringify(
+					wrapResponse(
+						{
+							results: sliced.map(toApiEntity),
+							total_matching: totalMatching,
+							returned: sliced.length,
+						},
+						meta,
+					),
+					null,
+					2,
+				),
+			},
+		],
+	};
+}
