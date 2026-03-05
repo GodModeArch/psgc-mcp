@@ -17,6 +17,8 @@ Public, read-only, no authentication required. Data sourced directly from the [P
 | `get_hierarchy` | Get the full administrative chain (barangay to region) |
 | `list_children` | List direct children of a parent entity |
 | `list_by_type` | List all entities at a given geographic level |
+| `batch_lookup` | Look up multiple entities in one call (max 50 codes) |
+| `query_by_population` | Query entities by population range with sorting and filtering |
 
 ### Geographic Levels
 
@@ -52,7 +54,7 @@ Error responses (`isError: true`) and informational messages (e.g. "No children 
 
 ### Entity Schema
 
-Entity objects returned by `lookup`, `get_hierarchy`, `list_children`, and `list_by_type` use snake_case field names:
+Entity objects returned by `lookup`, `get_hierarchy`, `list_children`, `list_by_type`, `batch_lookup`, and `query_by_population` use snake_case field names:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -81,6 +83,32 @@ The `search` tool returns a lighter result object:
 ### Strict Search
 
 The `search` tool accepts an optional `strict` boolean parameter. When `strict: true`, only exact name matches are returned (after normalization). Partial and substring matches are excluded. Useful when you know the exact place name and want to avoid ambiguous results.
+
+### Batch Lookup
+
+The `batch_lookup` tool accepts an array of 1-50 PSGC codes and returns results in the same order as input. Codes not found return `null` at their position.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `results` | `(Entity \| null)[]` | Entities in input order, `null` for not found |
+| `found` | `number` | Count of codes that resolved |
+| `not_found` | `number` | Count of codes that returned null |
+| `total` | `number` | Total codes requested |
+
+### Query by Population
+
+The `query_by_population` tool finds entities within a population range, sorted by population. Useful for questions like "largest cities in Region III" or "municipalities under 50,000 people."
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `level` | `string` | Yes | Geographic level to query |
+| `parent_code` | `string` | Bgy only | Scope results to a parent entity (prefix matching). Required for barangays. |
+| `min_population` | `number` | No | Minimum population (inclusive) |
+| `max_population` | `number` | No | Maximum population (inclusive) |
+| `sort` | `asc \| desc` | No | Sort order (default: `desc`) |
+| `limit` | `number` | No | Max results, 1-100 (default: 10) |
+
+Response includes `results` (entity array), `total_matching` (total before limit), and `returned` (actual count returned). Entities with null population are excluded.
 
 ## Connect
 
