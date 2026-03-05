@@ -203,7 +203,7 @@ async function main() {
 	const output = {
 		generated_at: new Date().toISOString(),
 		data_source: "Real PSGC Q4 2025 parsed data (scripts/data/output/*.json)",
-		api_version: "1.1.0",
+		api_version: "1.2.0",
 		total_cases: cases.length,
 		cases,
 	};

@@ -335,7 +335,7 @@ describe("generate sample responses", () => {
 		const output = {
 			generated_at: new Date().toISOString(),
 			test_dataset: "Fixture entities (NCR, Central Luzon, MIMAROPA, Manila, Bulacan, etc.)",
-			api_version: "1.1.0",
+			api_version: "1.2.0",
 			total_cases: samples.length,
 			cases: samples,
 		};

@@ -89,7 +89,7 @@ Add to your MCP client configuration:
 {
   "mcpServers": {
     "psgc": {
-      "url": "https://psgc-mcp.godmodearch.workers.dev/mcp"
+      "url": "https://psgc.godmode.ph/mcp"
     }
   }
 }
@@ -97,7 +97,7 @@ Add to your MCP client configuration:
 
 ### Quick test
 ```bash
-curl -X POST https://psgc-mcp.godmodearch.workers.dev/mcp \
+curl -X POST https://psgc.godmode.ph/mcp \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -141,7 +141,7 @@ Known edge cases:
 
 Last synced: March 2, 2026.
 
-## Breaking Changes (v1.1.0)
+## Breaking Changes (v1.1.0+)
 
 - All data responses are now wrapped in `{ _meta, data }`. Consumers must unwrap `data` from the response.
 - Entity field names changed to snake_case: `code` is now `psgc_code`, `parent` is now `parent_code`, `cityClass` is now `city_class`, etc.

@@ -40,7 +40,7 @@ const LISTABLE_LEVELS: [PSGCLevel, ...PSGCLevel[]] = [
 export class PsgcMCP extends McpAgent {
 	server = new McpServer({
 		name: "PSGC",
-		version: "1.1.0",
+		version: "1.2.0",
 	});
 
 	async init() {
