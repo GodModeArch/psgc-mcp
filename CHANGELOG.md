@@ -6,6 +6,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Version
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-05
+
+### Added
+
+- **Tool: batch_lookup.** Look up multiple PSGC entities in one call (max 50 codes). Returns results in input order with null for codes not found, plus found/not_found/total counts.
+
+- **Tool: query_by_population.** Query entities by population range with sorting. Supports filtering by geographic level, parent scope (prefix matching), and min/max population. Barangay queries require a parent_code. Returns results sorted by population (asc or desc) with configurable limit.
+
 ## [1.2.0] - 2026-03-03
 
 ### Fixed
