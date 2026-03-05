@@ -178,3 +178,5 @@ scripts/data/*/*.pdf
 scripts/data/**/*:Zone.Identifier
 scripts/data/output/
 
+# Local config
+CLAUDE.md
