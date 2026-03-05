@@ -182,7 +182,8 @@ Last synced: March 2, 2026.
 Part of a suite of Philippine public data MCP servers:
 
 - **PSGC MCP** (this repo)
-- **PH Holidays MCP**  -> Coming soon
+- **[LTS MCP](https://github.com/GodModeArch/lts-mcp)** - DHSUD License to Sell verification
+- **PH Holidays MCP** -> Coming soon
 - **BSP Bank Directory MCP** -> Coming soon
 
 All servers are free, public, and read-only. Data pulled from official Philippine government sources.
