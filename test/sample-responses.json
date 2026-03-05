@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-03-05T06:14:23.068Z",
+  "generated_at": "2026-03-05T10:19:43.666Z",
   "test_dataset": "Fixture entities (NCR, Central Luzon, MIMAROPA, Manila, Bulacan, etc.)",
-  "api_version": "1.2.0",
-  "total_cases": 25,
+  "api_version": "1.3.0",
+  "total_cases": 30,
   "cases": [
     {
       "tool": "lookup",
@@ -753,6 +753,243 @@
             "parent_code": "1700000000"
           }
         ]
+      }
+    },
+    {
+      "tool": "batch_lookup",
+      "description": "Batch lookup: Manila, Quezon City, Bulacan (all found)",
+      "args": {
+        "codes": [
+          "1301006000",
+          "1307404000",
+          "0314000000"
+        ]
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "results": [
+            {
+              "psgc_code": "1301006000",
+              "name": "City of Manila",
+              "level": "City",
+              "old_name": null,
+              "city_class": "HUC",
+              "income_class": null,
+              "urban_rural": null,
+              "population": 1846513,
+              "parent_code": "1301000000"
+            },
+            {
+              "psgc_code": "1307404000",
+              "name": "Quezon City",
+              "level": "City",
+              "old_name": null,
+              "city_class": "HUC",
+              "income_class": null,
+              "urban_rural": null,
+              "population": 2960048,
+              "parent_code": "1300000000"
+            },
+            {
+              "psgc_code": "0314000000",
+              "name": "Bulacan",
+              "level": "Prov",
+              "old_name": null,
+              "city_class": null,
+              "income_class": "1st",
+              "urban_rural": null,
+              "population": 3708890,
+              "parent_code": "0300000000"
+            }
+          ],
+          "found": 3,
+          "not_found": 0,
+          "total": 3
+        }
+      }
+    },
+    {
+      "tool": "batch_lookup",
+      "description": "Batch lookup with one unknown code (null in position 1)",
+      "args": {
+        "codes": [
+          "1301006000",
+          "9999999999",
+          "0314000000"
+        ]
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "results": [
+            {
+              "psgc_code": "1301006000",
+              "name": "City of Manila",
+              "level": "City",
+              "old_name": null,
+              "city_class": "HUC",
+              "income_class": null,
+              "urban_rural": null,
+              "population": 1846513,
+              "parent_code": "1301000000"
+            },
+            null,
+            {
+              "psgc_code": "0314000000",
+              "name": "Bulacan",
+              "level": "Prov",
+              "old_name": null,
+              "city_class": null,
+              "income_class": "1st",
+              "urban_rural": null,
+              "population": 3708890,
+              "parent_code": "0300000000"
+            }
+          ],
+          "found": 2,
+          "not_found": 1,
+          "total": 3
+        }
+      }
+    },
+    {
+      "tool": "query_by_population",
+      "description": "Top cities by population (descending, limit 5)",
+      "args": {
+        "level": "City",
+        "sort": "desc",
+        "limit": 5
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "results": [
+            {
+              "psgc_code": "1307404000",
+              "name": "Quezon City",
+              "level": "City",
+              "old_name": null,
+              "city_class": "HUC",
+              "income_class": null,
+              "urban_rural": null,
+              "population": 2960048,
+              "parent_code": "1300000000"
+            },
+            {
+              "psgc_code": "1301006000",
+              "name": "City of Manila",
+              "level": "City",
+              "old_name": null,
+              "city_class": "HUC",
+              "income_class": null,
+              "urban_rural": null,
+              "population": 1846513,
+              "parent_code": "1301000000"
+            },
+            {
+              "psgc_code": "0314009000",
+              "name": "City of Malolos",
+              "level": "City",
+              "old_name": null,
+              "city_class": "CC",
+              "income_class": null,
+              "urban_rural": null,
+              "population": 252164,
+              "parent_code": "0314000000"
+            }
+          ],
+          "total_matching": 3,
+          "returned": 3
+        }
+      }
+    },
+    {
+      "tool": "query_by_population",
+      "description": "Cities with population between 200K-500K",
+      "args": {
+        "level": "City",
+        "min_population": 200000,
+        "max_population": 500000
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "results": [
+            {
+              "psgc_code": "0314009000",
+              "name": "City of Malolos",
+              "level": "City",
+              "old_name": null,
+              "city_class": "CC",
+              "income_class": null,
+              "urban_rural": null,
+              "population": 252164,
+              "parent_code": "0314000000"
+            }
+          ],
+          "total_matching": 1,
+          "returned": 1
+        }
+      }
+    },
+    {
+      "tool": "query_by_population",
+      "description": "Barangays under Marilao sorted by population",
+      "args": {
+        "level": "Bgy",
+        "parent_code": "0314024000",
+        "sort": "desc"
+      },
+      "response": {
+        "_meta": {
+          "dataset_version": "PSGC Q4 2025",
+          "dataset_date": "2025-12-31",
+          "last_synced": "2026-03-02",
+          "source": "Philippine Statistics Authority (PSA)",
+          "source_url": "https://psa.gov.ph/classification/psgc/"
+        },
+        "data": {
+          "results": [
+            {
+              "psgc_code": "0314024001",
+              "name": "Abangan Norte",
+              "level": "Bgy",
+              "old_name": null,
+              "city_class": null,
+              "income_class": null,
+              "urban_rural": "Urban",
+              "population": 15238,
+              "parent_code": "0314024000"
+            }
+          ],
+          "total_matching": 1,
+          "returned": 1
+        }
       }
     }
   ]

@@ -213,6 +213,42 @@ describe("handleQueryByPopulation", () => {
 		expect(data.total_matching).toBeGreaterThanOrEqual(2);
 	});
 
+	// ── Error branches ───────────────────────────────────────────
+
+	it("returns error when type index is missing for non-Bgy level", async () => {
+		kv.delete("type:City");
+		const result = await handleQueryByPopulation(
+			{ level: "City" },
+			kv,
+			TEST_META,
+		);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("No type index found");
+	});
+
+	it("returns error when children index is missing for Bgy with parent_code", async () => {
+		const result = await handleQueryByPopulation(
+			{ level: "Bgy", parent_code: "9999999999" },
+			kv,
+			TEST_META,
+		);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("No children found");
+	});
+
+	it("caps limit at 100 even when higher value is passed", async () => {
+		kv = buildSeededKV(150); // 150 extra bgys + Abangan Norte = 151 bgys
+		const result = await handleQueryByPopulation(
+			{ level: "Bgy", parent_code: MARILAO.code, limit: 200 },
+			kv,
+			TEST_META,
+		);
+		const data = parseData<PopResult>(result);
+
+		expect(data.returned).toBeLessThanOrEqual(100);
+		expect(data.total_matching).toBeGreaterThanOrEqual(1);
+	});
+
 	// ── Metadata ──────────────────────────────────────────────────
 
 	it("wraps response with _meta", async () => {
