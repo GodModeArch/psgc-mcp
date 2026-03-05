@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-05T05:41:55.707Z",
+  "generated_at": "2026-03-05T06:14:23.068Z",
   "test_dataset": "Fixture entities (NCR, Central Luzon, MIMAROPA, Manila, Bulacan, etc.)",
   "api_version": "1.2.0",
   "total_cases": 25,
@@ -53,7 +53,7 @@
           "city_class": null,
           "income_class": null,
           "urban_rural": "Urban",
-          "population": null,
+          "population": 15238,
           "parent_code": "0314024000"
         }
       }
@@ -107,7 +107,7 @@
           "city_class": null,
           "income_class": "1st",
           "urban_rural": null,
-          "population": null,
+          "population": 3708890,
           "parent_code": "0300000000"
         }
       }
@@ -316,7 +316,7 @@
             "city_class": null,
             "income_class": null,
             "urban_rural": "Urban",
-            "population": null,
+            "population": 15238,
             "parent_code": "0314024000"
           },
           {
@@ -338,7 +338,7 @@
             "city_class": null,
             "income_class": "1st",
             "urban_rural": null,
-            "population": null,
+            "population": 3708890,
             "parent_code": "0300000000"
           },
           {
@@ -467,7 +467,7 @@
             "city_class": "CC",
             "income_class": null,
             "urban_rural": null,
-            "population": null,
+            "population": 252164,
             "parent_code": "0314000000"
           },
           {
@@ -507,7 +507,7 @@
             "city_class": null,
             "income_class": null,
             "urban_rural": "Urban",
-            "population": null,
+            "population": 15238,
             "parent_code": "0314024000"
           },
           {
@@ -691,7 +691,7 @@
             "city_class": null,
             "income_class": "1st",
             "urban_rural": null,
-            "population": null,
+            "population": 3708890,
             "parent_code": "0300000000"
           }
         ]
