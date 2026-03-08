@@ -11,6 +11,7 @@ export interface ApiEntity {
 	urban_rural: string | null;
 	population: number | null;
 	parent_code: string | null;
+	child_counts: Partial<Record<PSGCLevel, number>> | null;
 }
 
 /** Lightweight search result for API responses. */
@@ -27,6 +28,13 @@ export interface ApiMeta {
 	last_synced: string;
 	source: string;
 	source_url: string;
+}
+
+export interface PaginationMeta {
+	total_count: number;
+	offset: number;
+	limit: number;
+	has_more: boolean;
 }
 
 /** Config for building metadata from environment variables. */
@@ -61,6 +69,7 @@ export function toApiEntity(entity: PSGCEntity): ApiEntity {
 		urban_rural: entity.urbanRural ?? null,
 		population: entity.population ?? null,
 		parent_code: entity.parent ?? null,
+		child_counts: entity.childCounts ?? null,
 	};
 }
 
@@ -80,4 +89,13 @@ export function toApiSearchResult(hit: {
 /** Wrap data with metadata envelope. */
 export function wrapResponse<T>(data: T, meta: ApiMeta): { _meta: ApiMeta; data: T } {
 	return { _meta: meta, data };
+}
+
+/** Wrap data with metadata envelope and pagination info. */
+export function wrapPaginatedResponse<T>(
+	data: T,
+	meta: ApiMeta,
+	pagination: PaginationMeta,
+): { _meta: ApiMeta; data: T; pagination: PaginationMeta } {
+	return { _meta: meta, data, pagination };
 }
