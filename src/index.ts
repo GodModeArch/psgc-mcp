@@ -136,15 +136,29 @@ export class PsgcMCP extends McpAgent {
 
 		this.server.tool(
 			"list_by_type",
-			"List all PSGC entities of a given geographic level. Barangay (Bgy) is excluded because there are 42,000+ barangays. To find barangays, use 'search' with a name query or 'list_children' on a city/municipality.",
+			"List all PSGC entities of a given geographic level. Barangay (Bgy) is excluded because there are 42,000+ barangays. To find barangays, use 'search' with a name query or 'list_children' on a city/municipality. Paginated (default limit: 50).",
 			{
 				level: z
 					.enum(LISTABLE_LEVELS)
 					.describe(
 						"Geographic level: Reg (region), Prov (province), Dist (district), City, Mun (municipality), SubMun (sub-municipality), SGU (special geographic unit)",
 					),
+				offset: z
+					.number()
+					.int()
+					.min(0)
+					.optional()
+					.describe("Number of records to skip (default 0)"),
+				limit: z
+					.number()
+					.int()
+					.min(1)
+					.max(200)
+					.optional()
+					.describe("Max records to return (default 50, max 200)"),
 			},
-			async ({ level }) => handleListByType({ level }, kv, meta),
+			async ({ level, offset, limit }) =>
+				handleListByType({ level, offset, limit }, kv, meta),
 		);
 
 		// ── Tool 6: batch_lookup ────────────────────────────────────

@@ -261,12 +261,12 @@ export async function handleListChildren(
 // ── Tool 5: list_by_type ───────────────────────────────────────────
 
 export async function handleListByType(
-	args: { level: PSGCLevel },
+	args: { level: PSGCLevel; offset?: number; limit?: number },
 	kv: KVGet,
 	meta: ApiMeta,
 ): Promise<ToolResult> {
-	const codesRaw = await kv.get(`${KV_PREFIX.type}:${args.level}`);
-	if (!codesRaw) {
+	const raw = await kv.get(`${KV_PREFIX.type}:${args.level}`);
+	if (!raw) {
 		return {
 			content: [
 				{
@@ -278,27 +278,23 @@ export async function handleListByType(
 		};
 	}
 
-	const codes: string[] = JSON.parse(codesRaw);
-
-	const entities: PSGCEntity[] = [];
-	for (let i = 0; i < codes.length; i += 100) {
-		const batch = codes.slice(i, i + 100);
-		const fetches = batch.map(async (c) => {
-			const raw = await kv.get(`${KV_PREFIX.entity}:${c}`);
-			return raw ? (JSON.parse(raw) as PSGCEntity) : null;
-		});
-		const results = await Promise.all(fetches);
-		for (const r of results) {
-			if (r) entities.push(r);
-		}
-	}
+	const entities: PSGCEntity[] = JSON.parse(raw);
+	const totalCount = entities.length;
+	const offset = args.offset ?? 0;
+	const limit = Math.min(args.limit ?? 50, 200);
+	const page = entities.slice(offset, offset + limit);
 
 	return {
 		content: [
 			{
 				type: "text",
 				text: JSON.stringify(
-					wrapResponse(entities.map(toApiEntity), meta),
+					wrapPaginatedResponse(page.map(toApiEntity), meta, {
+						total_count: totalCount,
+						offset,
+						limit,
+						has_more: offset + limit < totalCount,
+					}),
 					null,
 					2,
 				),
