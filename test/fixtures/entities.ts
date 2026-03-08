@@ -17,6 +17,7 @@ export const NCR: PSGCEntity = {
 	parent: null,
 	regionCode: "1300000000",
 	provinceCode: null,
+	childCounts: { Dist: 1, City: 2, SubMun: 1 },
 };
 
 export const CENTRAL_LUZON: PSGCEntity = {
@@ -31,6 +32,7 @@ export const CENTRAL_LUZON: PSGCEntity = {
 	parent: null,
 	regionCode: "0300000000",
 	provinceCode: null,
+	childCounts: { Prov: 1, City: 1, Mun: 1, Bgy: 2 },
 };
 
 export const MIMAROPA: PSGCEntity = {
@@ -45,6 +47,7 @@ export const MIMAROPA: PSGCEntity = {
 	parent: null,
 	regionCode: "1700000000",
 	provinceCode: null,
+	childCounts: { SGU: 1 },
 };
 
 export const NCR_FIRST_DISTRICT: PSGCEntity = {
@@ -59,6 +62,7 @@ export const NCR_FIRST_DISTRICT: PSGCEntity = {
 	parent: "1300000000",
 	regionCode: "1300000000",
 	provinceCode: null,
+	childCounts: { City: 1, SubMun: 1 },
 };
 
 export const BULACAN: PSGCEntity = {
@@ -73,6 +77,7 @@ export const BULACAN: PSGCEntity = {
 	parent: "0300000000",
 	regionCode: "0300000000",
 	provinceCode: "0314000000",
+	childCounts: { City: 1, Mun: 1, Bgy: 2 },
 };
 
 export const MANILA: PSGCEntity = {
@@ -87,6 +92,7 @@ export const MANILA: PSGCEntity = {
 	parent: "1301000000",
 	regionCode: "1300000000",
 	provinceCode: "1301000000",
+	childCounts: { SubMun: 1 },
 };
 
 export const QUEZON_CITY: PSGCEntity = {
@@ -101,6 +107,7 @@ export const QUEZON_CITY: PSGCEntity = {
 	parent: "1300000000",
 	regionCode: "1300000000",
 	provinceCode: "1307000000",
+	childCounts: null,
 };
 
 export const MALOLOS: PSGCEntity = {
@@ -115,6 +122,7 @@ export const MALOLOS: PSGCEntity = {
 	parent: "0314000000",
 	regionCode: "0300000000",
 	provinceCode: "0314000000",
+	childCounts: null,
 };
 
 export const MARILAO: PSGCEntity = {
@@ -129,6 +137,7 @@ export const MARILAO: PSGCEntity = {
 	parent: "0314000000",
 	regionCode: "0300000000",
 	provinceCode: "0314000000",
+	childCounts: { Bgy: 2 },
 };
 
 export const TONDO: PSGCEntity = {
@@ -143,6 +152,7 @@ export const TONDO: PSGCEntity = {
 	parent: "1301006000",
 	regionCode: "1300000000",
 	provinceCode: "1301000000",
+	childCounts: null,
 };
 
 export const KALAYAAN: PSGCEntity = {
@@ -157,6 +167,7 @@ export const KALAYAAN: PSGCEntity = {
 	parent: "1700000000",
 	regionCode: "9900000000",
 	provinceCode: null,
+	childCounts: null,
 };
 
 export const ABANGAN_NORTE: PSGCEntity = {
@@ -171,6 +182,7 @@ export const ABANGAN_NORTE: PSGCEntity = {
 	parent: "0314024000",
 	regionCode: "0300000000",
 	provinceCode: "0314000000",
+	childCounts: null,
 };
 
 // ── Entity with Ñ for diacritic testing ──────────────────────────────
@@ -187,6 +199,7 @@ export const NONO_BGY: PSGCEntity = {
 	parent: "0314024000",
 	regionCode: "0300000000",
 	provinceCode: "0314000000",
+	childCounts: null,
 };
 
 // ── Fake barangays under Marilao (for batch testing) ────────────────
@@ -208,6 +221,7 @@ export function generateMarilaoBarangays(count: number): PSGCEntity[] {
 			parent: "0314024000",
 			regionCode: "0300000000",
 			provinceCode: "0314000000",
+			childCounts: null,
 		});
 	}
 	return bgys;
@@ -243,29 +257,31 @@ export function buildSeededKV(extraBarangays = 0): MockKV {
 		kvData[`${KV_PREFIX.entity}:${e.code}`] = e;
 	}
 
-	// Build children index
-	const childrenMap = new Map<string, string[]>();
+	// Build children index (pre-hydrated entity arrays)
+	const childrenMap = new Map<string, PSGCEntity[]>();
 	for (const e of entities) {
 		if (e.parent) {
 			const list = childrenMap.get(e.parent) ?? [];
-			list.push(e.code);
+			list.push(e);
 			childrenMap.set(e.parent, list);
 		}
 	}
-	for (const [parentCode, codes] of childrenMap) {
-		kvData[`${KV_PREFIX.children}:${parentCode}`] = codes.sort();
+	for (const [parentCode, children] of childrenMap) {
+		children.sort((a, b) => a.code.localeCompare(b.code));
+		kvData[`${KV_PREFIX.children}:${parentCode}`] = children;
 	}
 
-	// Build type index (skip Bgy per production behavior)
-	const typeMap = new Map<PSGCLevel, string[]>();
+	// Build type index (pre-hydrated entity arrays, skip Bgy per production behavior)
+	const typeMap = new Map<PSGCLevel, PSGCEntity[]>();
 	for (const e of entities) {
 		if (e.level === "Bgy") continue;
 		const list = typeMap.get(e.level) ?? [];
-		list.push(e.code);
+		list.push(e);
 		typeMap.set(e.level, list);
 	}
-	for (const [level, codes] of typeMap) {
-		kvData[`${KV_PREFIX.type}:${level}`] = codes.sort();
+	for (const [level, levelEntities] of typeMap) {
+		levelEntities.sort((a, b) => a.code.localeCompare(b.code));
+		kvData[`${KV_PREFIX.type}:${level}`] = levelEntities;
 	}
 
 	// Build search index
