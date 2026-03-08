@@ -2,7 +2,7 @@ import type { PSGCEntity, PSGCLevel, SearchIndexEntry } from "./types";
 import { KV_PREFIX } from "./types";
 import { normalize, deriveAncestorCodes } from "./utils";
 import type { ApiMeta } from "./response";
-import { toApiEntity, toApiSearchResult, wrapResponse } from "./response";
+import { toApiEntity, toApiSearchResult, wrapResponse, wrapPaginatedResponse } from "./response";
 
 /** Minimal KV interface for dependency injection (subset of KVNamespace) */
 export interface KVGet {
@@ -211,7 +211,7 @@ export async function handleGetHierarchy(
 // ── Tool 4: list_children ──────────────────────────────────────────
 
 export async function handleListChildren(
-	args: { code: string; level?: PSGCLevel },
+	args: { code: string; level?: PSGCLevel; offset?: number; limit?: number },
 	kv: KVGet,
 	meta: ApiMeta,
 ): Promise<ToolResult> {
@@ -227,29 +227,29 @@ export async function handleListChildren(
 		};
 	}
 
-	const childCodes: string[] = JSON.parse(childrenRaw);
+	let children: PSGCEntity[] = JSON.parse(childrenRaw);
 
-	const entities: PSGCEntity[] = [];
-	for (let i = 0; i < childCodes.length; i += 100) {
-		const batch = childCodes.slice(i, i + 100);
-		const fetches = batch.map(async (c) => {
-			const raw = await kv.get(`${KV_PREFIX.entity}:${c}`);
-			return raw ? (JSON.parse(raw) as PSGCEntity) : null;
-		});
-		const results = await Promise.all(fetches);
-		for (const r of results) {
-			if (r && (!args.level || r.level === args.level)) {
-				entities.push(r);
-			}
-		}
+	// Apply level filter before pagination
+	if (args.level) {
+		children = children.filter((c) => c.level === args.level);
 	}
+
+	const totalCount = children.length;
+	const offset = args.offset ?? 0;
+	const limit = Math.min(args.limit ?? 50, 200);
+	const page = children.slice(offset, offset + limit);
 
 	return {
 		content: [
 			{
 				type: "text",
 				text: JSON.stringify(
-					wrapResponse(entities.map(toApiEntity), meta),
+					wrapPaginatedResponse(page.map(toApiEntity), meta, {
+						total_count: totalCount,
+						offset,
+						limit,
+						has_more: offset + limit < totalCount,
+					}),
 					null,
 					2,
 				),
