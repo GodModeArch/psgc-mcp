@@ -1,5 +1,6 @@
 # PSGC MCP Server
 
+[![npm version](https://img.shields.io/npm/v/@aaronzara/psgc-mcp?color=cb3837&logo=npm)](https://www.npmjs.com/package/@aaronzara/psgc-mcp)
 ![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green)
