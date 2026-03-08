@@ -34,5 +34,8 @@ scripts/data/output/
 # Editor
 .vscode-test
 
+# Git worktrees
+.worktrees/
+
 # Local config
 CLAUDE.md
