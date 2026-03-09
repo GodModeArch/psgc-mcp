@@ -338,13 +338,14 @@ describe("strict search: additional edge cases", () => {
 		expect(data[0].name).toBe("Ñoño");
 	});
 
-	it("strict + empty query normalized: rejected with no-searchable-chars message", async () => {
+	it("strict + empty query normalized: rejected with isError and no-searchable-chars message", async () => {
 		const result = await handleSearch(
 			{ query: "", strict: true },
 			kv,
 			cache,
 			TEST_META,
 		);
+		expect(result.isError).toBe(true);
 		expect(result.content[0].text).toContain("No searchable characters");
 	});
 

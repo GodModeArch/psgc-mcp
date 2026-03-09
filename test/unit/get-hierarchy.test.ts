@@ -155,6 +155,16 @@ describe("handleGetHierarchy", () => {
 		expect(result.isError).toBeUndefined();
 	});
 
+	it("includes warning when parent data is corrupt", async () => {
+		kv.setRaw(`entity:${CENTRAL_LUZON.code}`, "corrupt!!!");
+		const result = await handleGetHierarchy({ code: BULACAN.code }, kv, TEST_META);
+		const text = result.content[0].text;
+		const parsed = JSON.parse(text);
+		expect(parsed.warning).toContain("incomplete");
+		// Chain still includes Bulacan itself
+		expect(parsed.data[0].psgc_code).toBe(BULACAN.code);
+	});
+
 	it("parent chain stops at non-Reg entity, fallback adds region", async () => {
 		kv.seed({
 			"entity:0314000000": JSON.stringify({

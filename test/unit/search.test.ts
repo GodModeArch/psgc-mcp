@@ -185,13 +185,15 @@ describe("handleSearch", () => {
 
 	// ── Edge cases ─────────────────────────────────────────────────
 
-	it("empty string query returns no-searchable-chars message", async () => {
+	it("empty string query returns isError with no-searchable-chars message", async () => {
 		const result = await handleSearch({ query: "" }, kv, cache, TEST_META);
+		expect(result.isError).toBe(true);
 		expect(result.content[0].text).toContain("No searchable characters");
 	});
 
-	it("punctuation-only query returns no-searchable-chars message", async () => {
+	it("punctuation-only query returns isError with no-searchable-chars message", async () => {
 		const result = await handleSearch({ query: "!!!" }, kv, cache, TEST_META);
+		expect(result.isError).toBe(true);
 		expect(result.content[0].text).toContain("No searchable characters");
 	});
 

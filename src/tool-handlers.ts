@@ -103,6 +103,7 @@ export async function handleSearch(
 					text: `No searchable characters in query "${args.query}". Use letters or numbers.`,
 				},
 			],
+			isError: true,
 		};
 	}
 
@@ -193,6 +194,7 @@ export async function handleGetHierarchy(
 	const entity = safeParseKV<PSGCEntity>(entityRaw);
 	if (!entity) return corruptDataError(`entity:${args.code}`);
 	const chain: PSGCEntity[] = [entity];
+	let hierarchyIncomplete = false;
 
 	let current = entity;
 	const visited = new Set<string>([args.code]);
@@ -205,7 +207,10 @@ export async function handleGetHierarchy(
 		if (!parentRaw) break;
 
 		const parent = safeParseKV<PSGCEntity>(parentRaw);
-		if (!parent) break; // corrupt parent data — stop traversal gracefully
+		if (!parent) {
+			hierarchyIncomplete = true;
+			break;
+		}
 		chain.push(parent);
 		current = parent;
 	}
@@ -228,15 +233,16 @@ export async function handleGetHierarchy(
 		}
 	}
 
+	const response = wrapResponse(chain.map(toApiEntity), meta);
+	if (hierarchyIncomplete) {
+		(response as Record<string, unknown>).warning = "Hierarchy may be incomplete due to corrupt parent data.";
+	}
+
 	return {
 		content: [
 			{
 				type: "text",
-				text: JSON.stringify(
-					wrapResponse(chain.map(toApiEntity), meta),
-					null,
-					2,
-				),
+				text: JSON.stringify(response, null, 2),
 			},
 		],
 	};
