@@ -6,6 +6,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Version
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-08
+
+### Changed
+
+- **list_children: return direct children only with pagination.** Pre-hydrated children indexes eliminate per-entity KV reads (1 KV read per call instead of N+1). Responses include `pagination` metadata with `total_count`, `offset`, `limit`, and `has_more`. Default limit: 50, max: 200.
+
+- **list_by_type: add pagination.** Same pre-hydration and pagination approach. A `list_by_type("Mun")` call now does 1 KV read instead of ~1,500. Default limit: 50, max: 200.
+
+- **query_by_population: use pre-hydrated data and add offset pagination.** Eliminates per-entity KV reads. Adds `offset` parameter. Response uses standard pagination envelope (`pagination` field) instead of the previous `total_matching`/`returned` shape.
+
+### Added
+
+- **child_counts on all entities.** Every entity now includes descendant counts by geographic level (e.g., a province shows `{ "City": 2, "Mun": 21, "Bgy": 557 }`). Computed at parse time. Available on `lookup`, `batch_lookup`, `list_children`, `list_by_type`, `get_hierarchy`, and `query_by_population` responses.
+
 ## [1.3.0] - 2026-03-05
 
 ### Added
