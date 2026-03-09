@@ -132,6 +132,7 @@ describe("resolveParents", () => {
 			parent: null,
 			regionCode: null,
 			provinceCode: null,
+			childCounts: null,
 		};
 	}
 
