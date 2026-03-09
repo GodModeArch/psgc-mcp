@@ -97,4 +97,18 @@ describe("handleBatchLookup", () => {
 		expect(data.results[0]!.population).toBe(MANILA.population);
 		expect(data.results[0]!.city_class).toBe("HUC");
 	});
+
+	it("treats corrupt KV entry as null instead of crashing", async () => {
+		kv.setRaw(`entity:${MANILA.code}`, "corrupt!!!");
+		const result = await handleBatchLookup(
+			{ codes: [MANILA.code, BULACAN.code] },
+			kv,
+			TEST_META,
+		);
+		const data = parseData<BatchResult>(result);
+		expect(data.results[0]).toBeNull();
+		expect(data.results[1]!.psgc_code).toBe(BULACAN.code);
+		expect(data.found).toBe(1);
+		expect(data.not_found).toBe(1);
+	});
 });

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-05T10:41:11.092Z",
+  "generated_at": "2026-03-09T04:15:28.364Z",
   "test_dataset": "Fixture entities (NCR, Central Luzon, MIMAROPA, Manila, Bulacan, etc.)",
   "api_version": "1.3.0",
   "total_cases": 30,
@@ -27,7 +27,10 @@
           "income_class": null,
           "urban_rural": null,
           "population": 1846513,
-          "parent_code": "1301000000"
+          "parent_code": "1301000000",
+          "child_counts": {
+            "SubMun": 1
+          }
         }
       }
     },
@@ -54,7 +57,8 @@
           "income_class": null,
           "urban_rural": "Urban",
           "population": 15238,
-          "parent_code": "0314024000"
+          "parent_code": "0314024000",
+          "child_counts": null
         }
       }
     },
@@ -81,7 +85,12 @@
           "income_class": null,
           "urban_rural": null,
           "population": 13484462,
-          "parent_code": null
+          "parent_code": null,
+          "child_counts": {
+            "Dist": 1,
+            "City": 2,
+            "SubMun": 1
+          }
         }
       }
     },
@@ -108,7 +117,12 @@
           "income_class": "1st",
           "urban_rural": null,
           "population": 3708890,
-          "parent_code": "0300000000"
+          "parent_code": "0300000000",
+          "child_counts": {
+            "City": 1,
+            "Mun": 1,
+            "Bgy": 2
+          }
         }
       }
     },
@@ -135,7 +149,8 @@
           "income_class": null,
           "urban_rural": null,
           "population": null,
-          "parent_code": "1700000000"
+          "parent_code": "1700000000",
+          "child_counts": null
         }
       }
     },
@@ -317,7 +332,8 @@
             "income_class": null,
             "urban_rural": "Urban",
             "population": 15238,
-            "parent_code": "0314024000"
+            "parent_code": "0314024000",
+            "child_counts": null
           },
           {
             "psgc_code": "0314024000",
@@ -328,7 +344,10 @@
             "income_class": null,
             "urban_rural": null,
             "population": 234572,
-            "parent_code": "0314000000"
+            "parent_code": "0314000000",
+            "child_counts": {
+              "Bgy": 2
+            }
           },
           {
             "psgc_code": "0314000000",
@@ -339,7 +358,12 @@
             "income_class": "1st",
             "urban_rural": null,
             "population": 3708890,
-            "parent_code": "0300000000"
+            "parent_code": "0300000000",
+            "child_counts": {
+              "City": 1,
+              "Mun": 1,
+              "Bgy": 2
+            }
           },
           {
             "psgc_code": "0300000000",
@@ -350,7 +374,13 @@
             "income_class": null,
             "urban_rural": null,
             "population": 12422172,
-            "parent_code": null
+            "parent_code": null,
+            "child_counts": {
+              "Prov": 1,
+              "City": 1,
+              "Mun": 1,
+              "Bgy": 2
+            }
           }
         ]
       }
@@ -379,7 +409,10 @@
             "income_class": null,
             "urban_rural": null,
             "population": 1846513,
-            "parent_code": "1301000000"
+            "parent_code": "1301000000",
+            "child_counts": {
+              "SubMun": 1
+            }
           },
           {
             "psgc_code": "1301000000",
@@ -390,7 +423,11 @@
             "income_class": null,
             "urban_rural": null,
             "population": null,
-            "parent_code": "1300000000"
+            "parent_code": "1300000000",
+            "child_counts": {
+              "City": 1,
+              "SubMun": 1
+            }
           },
           {
             "psgc_code": "1300000000",
@@ -401,7 +438,12 @@
             "income_class": null,
             "urban_rural": null,
             "population": 13484462,
-            "parent_code": null
+            "parent_code": null,
+            "child_counts": {
+              "Dist": 1,
+              "City": 2,
+              "SubMun": 1
+            }
           }
         ]
       }
@@ -430,7 +472,12 @@
             "income_class": null,
             "urban_rural": null,
             "population": 13484462,
-            "parent_code": null
+            "parent_code": null,
+            "child_counts": {
+              "Dist": 1,
+              "City": 2,
+              "SubMun": 1
+            }
           }
         ]
       }
@@ -468,7 +515,8 @@
             "income_class": null,
             "urban_rural": null,
             "population": 252164,
-            "parent_code": "0314000000"
+            "parent_code": "0314000000",
+            "child_counts": null
           },
           {
             "psgc_code": "0314024000",
@@ -479,9 +527,18 @@
             "income_class": null,
             "urban_rural": null,
             "population": 234572,
-            "parent_code": "0314000000"
+            "parent_code": "0314000000",
+            "child_counts": {
+              "Bgy": 2
+            }
           }
-        ]
+        ],
+        "pagination": {
+          "total_count": 2,
+          "offset": 0,
+          "limit": 50,
+          "has_more": false
+        }
       }
     },
     {
@@ -508,7 +565,8 @@
             "income_class": null,
             "urban_rural": "Urban",
             "population": 15238,
-            "parent_code": "0314024000"
+            "parent_code": "0314024000",
+            "child_counts": null
           },
           {
             "psgc_code": "0314024099",
@@ -519,7 +577,8 @@
             "income_class": null,
             "urban_rural": null,
             "population": null,
-            "parent_code": "0314024000"
+            "parent_code": "0314024000",
+            "child_counts": null
           },
           {
             "psgc_code": "0314024200",
@@ -530,7 +589,8 @@
             "income_class": null,
             "urban_rural": null,
             "population": 1000,
-            "parent_code": "0314024000"
+            "parent_code": "0314024000",
+            "child_counts": null
           },
           {
             "psgc_code": "0314024201",
@@ -541,7 +601,8 @@
             "income_class": null,
             "urban_rural": null,
             "population": 1001,
-            "parent_code": "0314024000"
+            "parent_code": "0314024000",
+            "child_counts": null
           },
           {
             "psgc_code": "0314024202",
@@ -552,7 +613,8 @@
             "income_class": null,
             "urban_rural": null,
             "population": 1002,
-            "parent_code": "0314024000"
+            "parent_code": "0314024000",
+            "child_counts": null
           },
           {
             "psgc_code": "0314024203",
@@ -563,7 +625,8 @@
             "income_class": null,
             "urban_rural": null,
             "population": 1003,
-            "parent_code": "0314024000"
+            "parent_code": "0314024000",
+            "child_counts": null
           },
           {
             "psgc_code": "0314024204",
@@ -574,9 +637,16 @@
             "income_class": null,
             "urban_rural": null,
             "population": 1004,
-            "parent_code": "0314024000"
+            "parent_code": "0314024000",
+            "child_counts": null
           }
-        ]
+        ],
+        "pagination": {
+          "total_count": 7,
+          "offset": 0,
+          "limit": 50,
+          "has_more": false
+        }
       }
     },
     {
@@ -604,9 +674,16 @@
             "income_class": null,
             "urban_rural": null,
             "population": 2960048,
-            "parent_code": "1300000000"
+            "parent_code": "1300000000",
+            "child_counts": null
           }
-        ]
+        ],
+        "pagination": {
+          "total_count": 1,
+          "offset": 0,
+          "limit": 50,
+          "has_more": false
+        }
       }
     },
     {
@@ -641,7 +718,13 @@
             "income_class": null,
             "urban_rural": null,
             "population": 12422172,
-            "parent_code": null
+            "parent_code": null,
+            "child_counts": {
+              "Prov": 1,
+              "City": 1,
+              "Mun": 1,
+              "Bgy": 2
+            }
           },
           {
             "psgc_code": "1300000000",
@@ -652,7 +735,12 @@
             "income_class": null,
             "urban_rural": null,
             "population": 13484462,
-            "parent_code": null
+            "parent_code": null,
+            "child_counts": {
+              "Dist": 1,
+              "City": 2,
+              "SubMun": 1
+            }
           },
           {
             "psgc_code": "1700000000",
@@ -663,9 +751,18 @@
             "income_class": null,
             "urban_rural": null,
             "population": null,
-            "parent_code": null
+            "parent_code": null,
+            "child_counts": {
+              "SGU": 1
+            }
           }
-        ]
+        ],
+        "pagination": {
+          "total_count": 3,
+          "offset": 0,
+          "limit": 50,
+          "has_more": false
+        }
       }
     },
     {
@@ -692,9 +789,20 @@
             "income_class": "1st",
             "urban_rural": null,
             "population": 3708890,
-            "parent_code": "0300000000"
+            "parent_code": "0300000000",
+            "child_counts": {
+              "City": 1,
+              "Mun": 1,
+              "Bgy": 2
+            }
           }
-        ]
+        ],
+        "pagination": {
+          "total_count": 1,
+          "offset": 0,
+          "limit": 50,
+          "has_more": false
+        }
       }
     },
     {
@@ -721,9 +829,18 @@
             "income_class": null,
             "urban_rural": null,
             "population": 234572,
-            "parent_code": "0314000000"
+            "parent_code": "0314000000",
+            "child_counts": {
+              "Bgy": 2
+            }
           }
-        ]
+        ],
+        "pagination": {
+          "total_count": 1,
+          "offset": 0,
+          "limit": 50,
+          "has_more": false
+        }
       }
     },
     {
@@ -750,9 +867,16 @@
             "income_class": null,
             "urban_rural": null,
             "population": null,
-            "parent_code": "1700000000"
+            "parent_code": "1700000000",
+            "child_counts": null
           }
-        ]
+        ],
+        "pagination": {
+          "total_count": 1,
+          "offset": 0,
+          "limit": 50,
+          "has_more": false
+        }
       }
     },
     {
@@ -784,7 +908,10 @@
               "income_class": null,
               "urban_rural": null,
               "population": 1846513,
-              "parent_code": "1301000000"
+              "parent_code": "1301000000",
+              "child_counts": {
+                "SubMun": 1
+              }
             },
             {
               "psgc_code": "1307404000",
@@ -795,7 +922,8 @@
               "income_class": null,
               "urban_rural": null,
               "population": 2960048,
-              "parent_code": "1300000000"
+              "parent_code": "1300000000",
+              "child_counts": null
             },
             {
               "psgc_code": "0314000000",
@@ -806,7 +934,12 @@
               "income_class": "1st",
               "urban_rural": null,
               "population": 3708890,
-              "parent_code": "0300000000"
+              "parent_code": "0300000000",
+              "child_counts": {
+                "City": 1,
+                "Mun": 1,
+                "Bgy": 2
+              }
             }
           ],
           "found": 3,
@@ -844,7 +977,10 @@
               "income_class": null,
               "urban_rural": null,
               "population": 1846513,
-              "parent_code": "1301000000"
+              "parent_code": "1301000000",
+              "child_counts": {
+                "SubMun": 1
+              }
             },
             null,
             {
@@ -856,7 +992,12 @@
               "income_class": "1st",
               "urban_rural": null,
               "population": 3708890,
-              "parent_code": "0300000000"
+              "parent_code": "0300000000",
+              "child_counts": {
+                "City": 1,
+                "Mun": 1,
+                "Bgy": 2
+              }
             }
           ],
           "found": 2,
@@ -881,44 +1022,51 @@
           "source": "Philippine Statistics Authority (PSA)",
           "source_url": "https://psa.gov.ph/classification/psgc/"
         },
-        "data": {
-          "results": [
-            {
-              "psgc_code": "1307404000",
-              "name": "Quezon City",
-              "level": "City",
-              "old_name": null,
-              "city_class": "HUC",
-              "income_class": null,
-              "urban_rural": null,
-              "population": 2960048,
-              "parent_code": "1300000000"
-            },
-            {
-              "psgc_code": "1301006000",
-              "name": "City of Manila",
-              "level": "City",
-              "old_name": null,
-              "city_class": "HUC",
-              "income_class": null,
-              "urban_rural": null,
-              "population": 1846513,
-              "parent_code": "1301000000"
-            },
-            {
-              "psgc_code": "0314009000",
-              "name": "City of Malolos",
-              "level": "City",
-              "old_name": null,
-              "city_class": "CC",
-              "income_class": null,
-              "urban_rural": null,
-              "population": 252164,
-              "parent_code": "0314000000"
+        "data": [
+          {
+            "psgc_code": "1307404000",
+            "name": "Quezon City",
+            "level": "City",
+            "old_name": null,
+            "city_class": "HUC",
+            "income_class": null,
+            "urban_rural": null,
+            "population": 2960048,
+            "parent_code": "1300000000",
+            "child_counts": null
+          },
+          {
+            "psgc_code": "1301006000",
+            "name": "City of Manila",
+            "level": "City",
+            "old_name": null,
+            "city_class": "HUC",
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1846513,
+            "parent_code": "1301000000",
+            "child_counts": {
+              "SubMun": 1
             }
-          ],
-          "total_matching": 3,
-          "returned": 3
+          },
+          {
+            "psgc_code": "0314009000",
+            "name": "City of Malolos",
+            "level": "City",
+            "old_name": null,
+            "city_class": "CC",
+            "income_class": null,
+            "urban_rural": null,
+            "population": 252164,
+            "parent_code": "0314000000",
+            "child_counts": null
+          }
+        ],
+        "pagination": {
+          "total_count": 3,
+          "offset": 0,
+          "limit": 5,
+          "has_more": false
         }
       }
     },
@@ -938,22 +1086,25 @@
           "source": "Philippine Statistics Authority (PSA)",
           "source_url": "https://psa.gov.ph/classification/psgc/"
         },
-        "data": {
-          "results": [
-            {
-              "psgc_code": "0314009000",
-              "name": "City of Malolos",
-              "level": "City",
-              "old_name": null,
-              "city_class": "CC",
-              "income_class": null,
-              "urban_rural": null,
-              "population": 252164,
-              "parent_code": "0314000000"
-            }
-          ],
-          "total_matching": 1,
-          "returned": 1
+        "data": [
+          {
+            "psgc_code": "0314009000",
+            "name": "City of Malolos",
+            "level": "City",
+            "old_name": null,
+            "city_class": "CC",
+            "income_class": null,
+            "urban_rural": null,
+            "population": 252164,
+            "parent_code": "0314000000",
+            "child_counts": null
+          }
+        ],
+        "pagination": {
+          "total_count": 1,
+          "offset": 0,
+          "limit": 10,
+          "has_more": false
         }
       }
     },
@@ -973,77 +1124,85 @@
           "source": "Philippine Statistics Authority (PSA)",
           "source_url": "https://psa.gov.ph/classification/psgc/"
         },
-        "data": {
-          "results": [
-            {
-              "psgc_code": "0314024001",
-              "name": "Abangan Norte",
-              "level": "Bgy",
-              "old_name": null,
-              "city_class": null,
-              "income_class": null,
-              "urban_rural": "Urban",
-              "population": 15238,
-              "parent_code": "0314024000"
-            },
-            {
-              "psgc_code": "0314024204",
-              "name": "Barangay 204",
-              "level": "Bgy",
-              "old_name": null,
-              "city_class": null,
-              "income_class": null,
-              "urban_rural": null,
-              "population": 1004,
-              "parent_code": "0314024000"
-            },
-            {
-              "psgc_code": "0314024203",
-              "name": "Barangay 203",
-              "level": "Bgy",
-              "old_name": null,
-              "city_class": null,
-              "income_class": null,
-              "urban_rural": null,
-              "population": 1003,
-              "parent_code": "0314024000"
-            },
-            {
-              "psgc_code": "0314024202",
-              "name": "Barangay 202",
-              "level": "Bgy",
-              "old_name": null,
-              "city_class": null,
-              "income_class": null,
-              "urban_rural": null,
-              "population": 1002,
-              "parent_code": "0314024000"
-            },
-            {
-              "psgc_code": "0314024201",
-              "name": "Barangay 201",
-              "level": "Bgy",
-              "old_name": null,
-              "city_class": null,
-              "income_class": null,
-              "urban_rural": null,
-              "population": 1001,
-              "parent_code": "0314024000"
-            },
-            {
-              "psgc_code": "0314024200",
-              "name": "Barangay 200",
-              "level": "Bgy",
-              "old_name": null,
-              "city_class": null,
-              "income_class": null,
-              "urban_rural": null,
-              "population": 1000,
-              "parent_code": "0314024000"
-            }
-          ],
-          "total_matching": 6,
-          "returned": 6
+        "data": [
+          {
+            "psgc_code": "0314024001",
+            "name": "Abangan Norte",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": "Urban",
+            "population": 15238,
+            "parent_code": "0314024000",
+            "child_counts": null
+          },
+          {
+            "psgc_code": "0314024204",
+            "name": "Barangay 204",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1004,
+            "parent_code": "0314024000",
+            "child_counts": null
+          },
+          {
+            "psgc_code": "0314024203",
+            "name": "Barangay 203",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1003,
+            "parent_code": "0314024000",
+            "child_counts": null
+          },
+          {
+            "psgc_code": "0314024202",
+            "name": "Barangay 202",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1002,
+            "parent_code": "0314024000",
+            "child_counts": null
+          },
+          {
+            "psgc_code": "0314024201",
+            "name": "Barangay 201",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1001,
+            "parent_code": "0314024000",
+            "child_counts": null
+          },
+          {
+            "psgc_code": "0314024200",
+            "name": "Barangay 200",
+            "level": "Bgy",
+            "old_name": null,
+            "city_class": null,
+            "income_class": null,
+            "urban_rural": null,
+            "population": 1000,
+            "parent_code": "0314024000",
+            "child_counts": null
+          }
+        ],
+        "pagination": {
+          "total_count": 6,
+          "offset": 0,
+          "limit": 10,
+          "has_more": false
         }
       }
     }

@@ -11,6 +11,11 @@ export class MockKV {
 		}
 	}
 
+	/** Set a raw string value (bypassing JSON.stringify). Useful for injecting malformed data. */
+	setRaw(key: string, value: string): void {
+		this.store.set(key, value);
+	}
+
 	get(key: string): Promise<string | null> {
 		return Promise.resolve(this.store.get(key) ?? null);
 	}

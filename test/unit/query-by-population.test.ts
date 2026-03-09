@@ -266,4 +266,29 @@ describe("handleQueryByPopulation", () => {
 		const envelope = parseEnvelope<ApiEntity[]>(result);
 		expect(envelope._meta).toEqual(TEST_META);
 	});
+
+	// ── Hardening: all-zeros parent_code ─────────────────────────
+
+	it("returns error for all-zeros parent_code", async () => {
+		const result = await handleQueryByPopulation(
+			{ level: "City", parent_code: "0000000000" },
+			kv,
+			TEST_META,
+		);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("non-zero digits");
+	});
+
+	// ── Hardening: corrupt KV data ───────────────────────────────
+
+	it("returns isError on corrupt type index instead of crashing", async () => {
+		kv.setRaw("type:City", "not valid json");
+		const result = await handleQueryByPopulation(
+			{ level: "City" },
+			kv,
+			TEST_META,
+		);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("Corrupt data");
+	});
 });
