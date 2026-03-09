@@ -81,4 +81,11 @@ describe("handleListByType", () => {
 		const { pagination } = parsePaginated<ApiEntity[]>(result);
 		expect(pagination.limit).toBe(50);
 	});
+
+	it("returns isError on corrupt KV data instead of crashing", async () => {
+		kv.setRaw("type:Reg", "not json!!!");
+		const result = await handleListByType({ level: "Reg" }, kv, TEST_META);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("Corrupt data");
+	});
 });

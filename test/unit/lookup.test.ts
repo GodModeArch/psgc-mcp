@@ -53,4 +53,11 @@ describe("handleLookup", () => {
 		expect(envelope._meta).toEqual(TEST_META);
 		expect(envelope.data.psgc_code).toBe(MANILA.code);
 	});
+
+	it("returns isError on corrupt KV data instead of crashing", async () => {
+		kv.setRaw(`entity:${MANILA.code}`, "not valid json {{{");
+		const result = await handleLookup({ code: MANILA.code }, kv, TEST_META);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("Corrupt data");
+	});
 });

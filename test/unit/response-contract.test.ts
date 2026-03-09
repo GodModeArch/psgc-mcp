@@ -139,9 +139,9 @@ describe("error and informational responses stay plain text", () => {
 		expect(() => JSON.parse(text)).toThrow();
 	});
 
-	it("list_children informational (no children key): not wrapped", async () => {
+	it("list_children error (no children key): not wrapped", async () => {
 		const result = await handleListChildren({ code: "9999999999" }, kv, TEST_META);
-		expect(result.isError).toBeUndefined();
+		expect(result.isError).toBe(true);
 		const text = result.content[0].text;
 		expect(() => JSON.parse(text)).toThrow();
 		expect(text).toContain("No children found");
@@ -338,16 +338,15 @@ describe("strict search: additional edge cases", () => {
 		expect(data[0].name).toBe("Ñoño");
 	});
 
-	it("strict + empty query normalized: matches everything (edge case)", async () => {
-		// normalize("") = "" and entry.n === "" is false for all real entries
+	it("strict + empty query normalized: rejected with isError and no-searchable-chars message", async () => {
 		const result = await handleSearch(
 			{ query: "", strict: true },
 			kv,
 			cache,
 			TEST_META,
 		);
-		// Empty string normalizes to "", no entry.n === "" so no matches
-		expect(result.content[0].text).toContain("No results found");
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("No searchable characters");
 	});
 
 	it("strict + limit: only returns up to limit", async () => {

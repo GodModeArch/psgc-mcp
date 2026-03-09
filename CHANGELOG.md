@@ -6,6 +6,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Version
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-03-09
+
+### Fixed
+
+- **Tool handlers: prevent Worker crash on corrupt KV data.** All 9 `JSON.parse` call sites now use a `safeParseKV` helper with try/catch. Corrupt or truncated KV values return an `isError` response instead of an uncaught `SyntaxError` that crashes the entire Worker request.
+
+- **list_children: set `isError: true` on KV miss.** Previously returned a plain text message without the error flag, inconsistent with all other handlers. MCP clients checking `isError` now correctly detect this as a failure.
+
+- **query_by_population: reject all-zeros parent_code.** A `parent_code` of `"0000000000"` caused the prefix filter to produce an empty string, which matched every entity code via `startsWith("")`. Now returns an error instead of silently returning unscoped results.
+
+- **search: reject queries with no searchable characters.** Punctuation-only queries like `"!!!"` normalized to an empty string, which matched all entries via `includes("")`. Now returns a descriptive message instead of dumping the index.
+
+- **Zod schemas: enforce digits-only PSGC codes.** All code parameters now use `/^\d{10}$/` regex validation in addition to `.length(10)`. Previously accepted any 10-character string (e.g., `"AAAAAAAAAA"`).
+
 ## [1.4.0] - 2026-03-08
 
 ### Changed

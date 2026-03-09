@@ -39,10 +39,13 @@ const LISTABLE_LEVELS: [PSGCLevel, ...PSGCLevel[]] = [
 	"SGU",
 ];
 
+/** Reusable Zod schema for 10-digit PSGC codes (digits only). */
+const psgcCode = z.string().length(10).regex(/^\d{10}$/, "PSGC code must be exactly 10 digits");
+
 export class PsgcMCP extends McpAgent {
 	server = new McpServer({
 		name: "PSGC",
-		version: "1.4.0",
+		version: "1.4.1",
 	});
 
 	async init() {
@@ -58,7 +61,7 @@ export class PsgcMCP extends McpAgent {
 		this.server.tool(
 			"lookup",
 			"Look up a Philippine geographic entity by its 10-digit PSGC code. Returns the full entity record including name, level, parent, population, and classification data.",
-			{ code: z.string().length(10).describe("10-digit PSGC code") },
+			{ code: psgcCode.describe("10-digit PSGC code") },
 			async ({ code }) => handleLookup({ code }, kv, meta),
 		);
 
@@ -95,7 +98,7 @@ export class PsgcMCP extends McpAgent {
 			"get_hierarchy",
 			"Get the full administrative hierarchy for a PSGC entity. Returns the chain from the entity up through its parent city/municipality, province, and region.",
 			{
-				code: z.string().length(10).describe("10-digit PSGC code"),
+				code: psgcCode.describe("10-digit PSGC code"),
 			},
 			async ({ code }) => handleGetHierarchy({ code }, kv, meta),
 		);
@@ -106,10 +109,7 @@ export class PsgcMCP extends McpAgent {
 			"list_children",
 			"List the direct children of a PSGC entity. For a region, returns provinces/districts. For a province, returns cities/municipalities. For a city/municipality, returns barangays. Optionally filter by level. Paginated (default limit: 50).",
 			{
-				code: z
-					.string()
-					.length(10)
-					.describe("10-digit PSGC code of the parent entity"),
+				code: psgcCode.describe("10-digit PSGC code of the parent entity"),
 				level: z
 					.enum(PSGC_LEVELS)
 					.optional()
@@ -168,7 +168,7 @@ export class PsgcMCP extends McpAgent {
 			"Look up multiple PSGC entities in one call. Pass an array of 10-digit codes (max 50). Returns results in the same order as input, with null for codes not found.",
 			{
 				codes: z
-					.array(z.string().length(10))
+					.array(psgcCode)
 					.min(1)
 					.max(50)
 					.describe("Array of 10-digit PSGC codes (1-50)"),
@@ -185,9 +185,7 @@ export class PsgcMCP extends McpAgent {
 				level: z
 					.enum(PSGC_LEVELS)
 					.describe("Geographic level to query"),
-				parent_code: z
-					.string()
-					.length(10)
+				parent_code: psgcCode
 					.optional()
 					.describe(
 						"Filter to entities within this parent (required for Bgy). Uses code prefix matching.",

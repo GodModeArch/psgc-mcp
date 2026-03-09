@@ -4,6 +4,23 @@ import { normalize, deriveAncestorCodes } from "./utils";
 import type { ApiMeta } from "./response";
 import { toApiEntity, toApiSearchResult, wrapResponse, wrapPaginatedResponse } from "./response";
 
+/** Safely parse JSON from KV, returning null on malformed data. */
+function safeParseKV<T>(raw: string): T | null {
+	try {
+		return JSON.parse(raw) as T;
+	} catch {
+		return null;
+	}
+}
+
+/** Standard error response for corrupt KV data. */
+function corruptDataError(key: string): ToolResult {
+	return {
+		content: [{ type: "text", text: `Corrupt data in KV for key "${key}". This is a server-side data issue.` }],
+		isError: true,
+	};
+}
+
 /** Minimal KV interface for dependency injection (subset of KVNamespace) */
 export interface KVGet {
 	get(key: string): Promise<string | null>;
@@ -38,7 +55,9 @@ export async function handleLookup(
 		};
 	}
 
-	const entity: PSGCEntity = JSON.parse(raw);
+	const entity = safeParseKV<PSGCEntity>(raw);
+	if (!entity) return corruptDataError(`entity:${args.code}`);
+
 	return {
 		content: [
 			{
@@ -70,10 +89,24 @@ export async function handleSearch(
 				isError: true,
 			};
 		}
-		cache.current = JSON.parse(raw);
+		const parsed = safeParseKV<SearchIndexEntry[]>(raw);
+		if (!parsed) return corruptDataError("search:index");
+		cache.current = parsed;
 	}
 
 	const normalizedQuery = normalize(args.query);
+	if (normalizedQuery.length === 0) {
+		return {
+			content: [
+				{
+					type: "text",
+					text: `No searchable characters in query "${args.query}". Use letters or numbers.`,
+				},
+			],
+			isError: true,
+		};
+	}
+
 	const maxResults = args.limit ?? 10;
 	const strict = args.strict ?? false;
 
@@ -158,8 +191,10 @@ export async function handleGetHierarchy(
 		};
 	}
 
-	const entity: PSGCEntity = JSON.parse(entityRaw);
+	const entity = safeParseKV<PSGCEntity>(entityRaw);
+	if (!entity) return corruptDataError(`entity:${args.code}`);
 	const chain: PSGCEntity[] = [entity];
+	let hierarchyIncomplete = false;
 
 	let current = entity;
 	const visited = new Set<string>([args.code]);
@@ -171,7 +206,11 @@ export async function handleGetHierarchy(
 		);
 		if (!parentRaw) break;
 
-		const parent: PSGCEntity = JSON.parse(parentRaw);
+		const parent = safeParseKV<PSGCEntity>(parentRaw);
+		if (!parent) {
+			hierarchyIncomplete = true;
+			break;
+		}
 		chain.push(parent);
 		current = parent;
 	}
@@ -182,7 +221,7 @@ export async function handleGetHierarchy(
 			.filter((c) => !visited.has(c))
 			.map(async (c) => {
 				const raw = await kv.get(`${KV_PREFIX.entity}:${c}`);
-				return raw ? (JSON.parse(raw) as PSGCEntity) : null;
+				return raw ? safeParseKV<PSGCEntity>(raw) : null;
 			});
 
 		const ancestors = await Promise.all(fetches);
@@ -194,15 +233,16 @@ export async function handleGetHierarchy(
 		}
 	}
 
+	const response = wrapResponse(chain.map(toApiEntity), meta);
+	if (hierarchyIncomplete) {
+		(response as Record<string, unknown>).warning = "Hierarchy may be incomplete due to corrupt parent data.";
+	}
+
 	return {
 		content: [
 			{
 				type: "text",
-				text: JSON.stringify(
-					wrapResponse(chain.map(toApiEntity), meta),
-					null,
-					2,
-				),
+				text: JSON.stringify(response, null, 2),
 			},
 		],
 	};
@@ -224,10 +264,13 @@ export async function handleListChildren(
 					text: `No children found for PSGC code ${args.code}. It may be a barangay (leaf level) or the code may be invalid.`,
 				},
 			],
+			isError: true,
 		};
 	}
 
-	let children: PSGCEntity[] = JSON.parse(childrenRaw);
+	const parsed = safeParseKV<PSGCEntity[]>(childrenRaw);
+	if (!parsed) return corruptDataError(`children:${args.code}`);
+	let children = parsed;
 
 	// Apply level filter before pagination
 	if (args.level) {
@@ -278,7 +321,9 @@ export async function handleListByType(
 		};
 	}
 
-	const entities: PSGCEntity[] = JSON.parse(raw);
+	const entities = safeParseKV<PSGCEntity[]>(raw);
+	if (!entities) return corruptDataError(`type:${args.level}`);
+
 	const totalCount = entities.length;
 	const offset = args.offset ?? 0;
 	const limit = Math.min(args.limit ?? 50, 200);
@@ -333,9 +378,11 @@ export async function handleBatchLookup(
 		args.codes.map((c) => kv.get(`${KV_PREFIX.entity}:${c}`)),
 	);
 
-	const results = raws.map((raw) =>
-		raw ? toApiEntity(JSON.parse(raw) as PSGCEntity) : null,
-	);
+	const results = raws.map((raw) => {
+		if (!raw) return null;
+		const entity = safeParseKV<PSGCEntity>(raw);
+		return entity ? toApiEntity(entity) : null;
+	});
 
 	const found = results.filter((r) => r !== null).length;
 	const notFound = results.length - found;
@@ -431,12 +478,21 @@ export async function handleQueryByPopulation(
 		};
 	}
 
-	const entities: PSGCEntity[] = JSON.parse(raw);
+	const kvKey = level === "Bgy" ? `children:${parent_code}` : `type:${level}`;
+	const entities = safeParseKV<PSGCEntity[]>(raw);
+	if (!entities) return corruptDataError(kvKey);
 
 	// Derive parent prefix for filtering (strip trailing zeros)
 	const parentPrefix = parent_code
 		? parent_code.replace(/0+$/, "")
 		: undefined;
+
+	if (parentPrefix !== undefined && parentPrefix.length === 0) {
+		return {
+			content: [{ type: "text", text: "Invalid parent_code: code must contain non-zero digits." }],
+			isError: true,
+		};
+	}
 
 	// Filter in-memory
 	const matching = entities.filter((entity) => {

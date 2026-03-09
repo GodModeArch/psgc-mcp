@@ -185,16 +185,16 @@ describe("handleSearch", () => {
 
 	// ── Edge cases ─────────────────────────────────────────────────
 
-	it("empty string query matches everything (includes returns true for '')", async () => {
+	it("empty string query returns isError with no-searchable-chars message", async () => {
 		const result = await handleSearch({ query: "" }, kv, cache, TEST_META);
-		const results = parseData<ApiSearchResult[]>(result);
-		expect(results.length).toBe(10);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("No searchable characters");
 	});
 
-	it("punctuation-only query normalizes to '' and matches everything", async () => {
+	it("punctuation-only query returns isError with no-searchable-chars message", async () => {
 		const result = await handleSearch({ query: "!!!" }, kv, cache, TEST_META);
-		const results = parseData<ApiSearchResult[]>(result);
-		expect(results.length).toBe(10);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("No searchable characters");
 	});
 
 	it("limit 0 returns no-results message even when matches exist", async () => {
@@ -226,5 +226,13 @@ describe("handleSearch", () => {
 		);
 		expect(result.content[0].text).toContain("No results found");
 		expect(result.content[0].text).toContain("at level Prov");
+	});
+
+	it("returns isError on corrupt search index instead of crashing", async () => {
+		kv.setRaw(KV_PREFIX.searchIndex, "truncated json [{{");
+		cache = { current: null };
+		const result = await handleSearch({ query: "Manila" }, kv, cache, TEST_META);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("Corrupt data");
 	});
 });

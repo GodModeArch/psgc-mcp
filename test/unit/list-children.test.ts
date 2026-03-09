@@ -17,9 +17,9 @@ beforeEach(() => {
 });
 
 describe("handleListChildren", () => {
-	it("returns informational message when no children key exists", async () => {
+	it("returns error when no children key exists", async () => {
 		const result = await handleListChildren({ code: "9999999999" }, kv, TEST_META);
-		expect(result.isError).toBeUndefined();
+		expect(result.isError).toBe(true);
 		expect(result.content[0].text).toContain("No children found");
 	});
 
@@ -99,5 +99,12 @@ describe("handleListChildren", () => {
 		const marilao = data.find((e) => e.psgc_code === MARILAO.code);
 		expect(marilao).toBeDefined();
 		expect(marilao!.child_counts).toEqual({ Bgy: 2 });
+	});
+
+	it("returns isError on corrupt KV data instead of crashing", async () => {
+		kv.setRaw(`children:${BULACAN.code}`, "{broken json");
+		const result = await handleListChildren({ code: BULACAN.code }, kv, TEST_META);
+		expect(result.isError).toBe(true);
+		expect(result.content[0].text).toContain("Corrupt data");
 	});
 });
