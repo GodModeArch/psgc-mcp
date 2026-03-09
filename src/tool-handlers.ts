@@ -2,7 +2,7 @@ import type { PSGCEntity, PSGCLevel, SearchIndexEntry } from "./types";
 import { KV_PREFIX } from "./types";
 import { normalize, deriveAncestorCodes } from "./utils";
 import type { ApiMeta } from "./response";
-import { toApiEntity, toApiSearchResult, wrapResponse } from "./response";
+import { toApiEntity, toApiSearchResult, wrapResponse, wrapPaginatedResponse } from "./response";
 
 /** Minimal KV interface for dependency injection (subset of KVNamespace) */
 export interface KVGet {
@@ -211,7 +211,7 @@ export async function handleGetHierarchy(
 // ── Tool 4: list_children ──────────────────────────────────────────
 
 export async function handleListChildren(
-	args: { code: string; level?: PSGCLevel },
+	args: { code: string; level?: PSGCLevel; offset?: number; limit?: number },
 	kv: KVGet,
 	meta: ApiMeta,
 ): Promise<ToolResult> {
@@ -227,29 +227,29 @@ export async function handleListChildren(
 		};
 	}
 
-	const childCodes: string[] = JSON.parse(childrenRaw);
+	let children: PSGCEntity[] = JSON.parse(childrenRaw);
 
-	const entities: PSGCEntity[] = [];
-	for (let i = 0; i < childCodes.length; i += 100) {
-		const batch = childCodes.slice(i, i + 100);
-		const fetches = batch.map(async (c) => {
-			const raw = await kv.get(`${KV_PREFIX.entity}:${c}`);
-			return raw ? (JSON.parse(raw) as PSGCEntity) : null;
-		});
-		const results = await Promise.all(fetches);
-		for (const r of results) {
-			if (r && (!args.level || r.level === args.level)) {
-				entities.push(r);
-			}
-		}
+	// Apply level filter before pagination
+	if (args.level) {
+		children = children.filter((c) => c.level === args.level);
 	}
+
+	const totalCount = children.length;
+	const offset = args.offset ?? 0;
+	const limit = Math.min(args.limit ?? 50, 200);
+	const page = children.slice(offset, offset + limit);
 
 	return {
 		content: [
 			{
 				type: "text",
 				text: JSON.stringify(
-					wrapResponse(entities.map(toApiEntity), meta),
+					wrapPaginatedResponse(page.map(toApiEntity), meta, {
+						total_count: totalCount,
+						offset,
+						limit,
+						has_more: offset + limit < totalCount,
+					}),
 					null,
 					2,
 				),
@@ -261,12 +261,12 @@ export async function handleListChildren(
 // ── Tool 5: list_by_type ───────────────────────────────────────────
 
 export async function handleListByType(
-	args: { level: PSGCLevel },
+	args: { level: PSGCLevel; offset?: number; limit?: number },
 	kv: KVGet,
 	meta: ApiMeta,
 ): Promise<ToolResult> {
-	const codesRaw = await kv.get(`${KV_PREFIX.type}:${args.level}`);
-	if (!codesRaw) {
+	const raw = await kv.get(`${KV_PREFIX.type}:${args.level}`);
+	if (!raw) {
 		return {
 			content: [
 				{
@@ -278,27 +278,23 @@ export async function handleListByType(
 		};
 	}
 
-	const codes: string[] = JSON.parse(codesRaw);
-
-	const entities: PSGCEntity[] = [];
-	for (let i = 0; i < codes.length; i += 100) {
-		const batch = codes.slice(i, i + 100);
-		const fetches = batch.map(async (c) => {
-			const raw = await kv.get(`${KV_PREFIX.entity}:${c}`);
-			return raw ? (JSON.parse(raw) as PSGCEntity) : null;
-		});
-		const results = await Promise.all(fetches);
-		for (const r of results) {
-			if (r) entities.push(r);
-		}
-	}
+	const entities: PSGCEntity[] = JSON.parse(raw);
+	const totalCount = entities.length;
+	const offset = args.offset ?? 0;
+	const limit = Math.min(args.limit ?? 50, 200);
+	const page = entities.slice(offset, offset + limit);
 
 	return {
 		content: [
 			{
 				type: "text",
 				text: JSON.stringify(
-					wrapResponse(entities.map(toApiEntity), meta),
+					wrapPaginatedResponse(page.map(toApiEntity), meta, {
+						total_count: totalCount,
+						offset,
+						limit,
+						has_more: offset + limit < totalCount,
+					}),
 					null,
 					2,
 				),
@@ -367,6 +363,7 @@ export async function handleQueryByPopulation(
 		min_population?: number;
 		max_population?: number;
 		sort?: "asc" | "desc";
+		offset?: number;
 		limit?: number;
 	},
 	kv: KVGet,
@@ -378,6 +375,7 @@ export async function handleQueryByPopulation(
 		min_population,
 		max_population,
 		sort = "desc",
+		offset: rawOffset,
 		limit = 10,
 	} = args;
 
@@ -410,15 +408,15 @@ export async function handleQueryByPopulation(
 		};
 	}
 
-	// Get candidate codes
-	let codesRaw: string | null;
+	// Get pre-hydrated entities (1 KV read)
+	let raw: string | null;
 	if (level === "Bgy") {
-		codesRaw = await kv.get(`${KV_PREFIX.children}:${parent_code}`);
+		raw = await kv.get(`${KV_PREFIX.children}:${parent_code}`);
 	} else {
-		codesRaw = await kv.get(`${KV_PREFIX.type}:${level}`);
+		raw = await kv.get(`${KV_PREFIX.type}:${level}`);
 	}
 
-	if (!codesRaw) {
+	if (!raw) {
 		return {
 			content: [
 				{
@@ -433,32 +431,22 @@ export async function handleQueryByPopulation(
 		};
 	}
 
-	const codes: string[] = JSON.parse(codesRaw);
+	const entities: PSGCEntity[] = JSON.parse(raw);
 
 	// Derive parent prefix for filtering (strip trailing zeros)
 	const parentPrefix = parent_code
 		? parent_code.replace(/0+$/, "")
 		: undefined;
 
-	// Fetch entities in batches of 100 and filter
-	const matching: PSGCEntity[] = [];
-	for (let i = 0; i < codes.length; i += 100) {
-		const batch = codes.slice(i, i + 100);
-		const fetches = batch.map(async (c) => {
-			const raw = await kv.get(`${KV_PREFIX.entity}:${c}`);
-			return raw ? (JSON.parse(raw) as PSGCEntity) : null;
-		});
-		const results = await Promise.all(fetches);
-		for (const entity of results) {
-			if (!entity) continue;
-			if (entity.level !== level) continue;
-			if (entity.population === null) continue;
-			if (parentPrefix && level !== "Bgy" && !entity.code.startsWith(parentPrefix)) continue;
-			if (min_population !== undefined && entity.population < min_population) continue;
-			if (max_population !== undefined && entity.population > max_population) continue;
-			matching.push(entity);
-		}
-	}
+	// Filter in-memory
+	const matching = entities.filter((entity) => {
+		if (entity.level !== level) return false;
+		if (entity.population === null) return false;
+		if (parentPrefix && level !== "Bgy" && !entity.code.startsWith(parentPrefix)) return false;
+		if (min_population !== undefined && entity.population < min_population) return false;
+		if (max_population !== undefined && entity.population > max_population) return false;
+		return true;
+	});
 
 	// Sort by population
 	matching.sort((a, b) =>
@@ -467,23 +455,23 @@ export async function handleQueryByPopulation(
 			: (b.population ?? 0) - (a.population ?? 0),
 	);
 
+	// Paginate
 	const totalMatching = matching.length;
+	const offset = rawOffset ?? 0;
 	const effectiveLimit = Math.min(limit, 100);
-	const sliced = matching.slice(0, effectiveLimit);
+	const page = matching.slice(offset, offset + effectiveLimit);
 
 	return {
 		content: [
 			{
 				type: "text",
 				text: JSON.stringify(
-					wrapResponse(
-						{
-							results: sliced.map(toApiEntity),
-							total_matching: totalMatching,
-							returned: sliced.length,
-						},
-						meta,
-					),
+					wrapPaginatedResponse(page.map(toApiEntity), meta, {
+						total_count: totalMatching,
+						offset,
+						limit: effectiveLimit,
+						has_more: offset + effectiveLimit < totalMatching,
+					}),
 					null,
 					2,
 				),

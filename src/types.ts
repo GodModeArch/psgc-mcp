@@ -20,6 +20,7 @@ export interface PSGCEntity {
 	parent: string | null;
 	regionCode: string | null;
 	provinceCode: string | null;
+	childCounts: Partial<Record<PSGCLevel, number>> | null;
 }
 
 export interface SearchIndexEntry {

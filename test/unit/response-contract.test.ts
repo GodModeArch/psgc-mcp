@@ -53,6 +53,7 @@ const ENTITY_FIELDS = [
 	"urban_rural",
 	"population",
 	"parent_code",
+	"child_counts",
 ];
 
 const SEARCH_RESULT_FIELDS = ["psgc_code", "name", "level"];
@@ -302,13 +303,13 @@ describe("backward compatibility with old KV data (missing fields)", () => {
 	});
 
 	it("list_by_type: old-format entities in type index get null-filled", async () => {
+		// type: index now stores pre-hydrated entity arrays
 		kv.seed({
-			"entity:8800000000": JSON.stringify({
+			"type:Reg": JSON.stringify([{
 				code: "8800000000",
 				name: "Legacy Region",
 				level: "Reg",
-			}),
-			"type:Reg": JSON.stringify(["8800000000"]),
+			}]),
 		});
 
 		const result = await handleListByType({ level: "Reg" }, kv, TEST_META);
@@ -318,6 +319,7 @@ describe("backward compatibility with old KV data (missing fields)", () => {
 		expect(legacy!.old_name).toBeNull();
 		expect(legacy!.population).toBeNull();
 		expect(legacy!.parent_code).toBeNull();
+		expect(legacy!.child_counts).toBeNull();
 	});
 });
 

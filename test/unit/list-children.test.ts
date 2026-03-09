@@ -5,10 +5,9 @@ import {
 	BULACAN,
 	MARILAO,
 	MALOLOS,
-	ABANGAN_NORTE,
 } from "../fixtures/entities";
 import type { MockKV } from "../fixtures/mock-kv";
-import { TEST_META, parseData } from "../fixtures/meta";
+import { TEST_META, parsePaginated } from "../fixtures/meta";
 import type { ApiEntity } from "../../src/response";
 
 let kv: MockKV;
@@ -24,80 +23,81 @@ describe("handleListChildren", () => {
 		expect(result.content[0].text).toContain("No children found");
 	});
 
-	it("returns child entities for a parent", async () => {
+	it("returns direct child entities with pagination metadata", async () => {
 		const result = await handleListChildren({ code: BULACAN.code }, kv, TEST_META);
-		const entities = parseData<ApiEntity[]>(result);
-		const codes = entities.map((e) => e.psgc_code);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
+		const codes = data.map((e) => e.psgc_code);
 		expect(codes).toContain(MALOLOS.code);
 		expect(codes).toContain(MARILAO.code);
+		expect(pagination.total_count).toBe(2);
+		expect(pagination.has_more).toBe(false);
 	});
 
-	it("level filter returns only matching children", async () => {
+	it("level filter applies before pagination", async () => {
 		const result = await handleListChildren(
 			{ code: BULACAN.code, level: "Mun" },
 			kv,
 			TEST_META,
 		);
-		const entities = parseData<ApiEntity[]>(result);
-		for (const e of entities) {
-			expect(e.level).toBe("Mun");
-		}
-		expect(entities.map((e) => e.psgc_code)).toContain(MARILAO.code);
-		expect(entities.map((e) => e.psgc_code)).not.toContain(MALOLOS.code);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
+		expect(data).toHaveLength(1);
+		expect(data[0].psgc_code).toBe(MARILAO.code);
+		expect(pagination.total_count).toBe(1);
 	});
 
-	it("silently skips missing child entities", async () => {
-		kv.seed({
-			"children:0000000000": JSON.stringify(["9999999999", ABANGAN_NORTE.code]),
-		});
-
-		const result = await handleListChildren({ code: "0000000000" }, kv, TEST_META);
-		const entities = parseData<ApiEntity[]>(result);
-		expect(entities).toHaveLength(1);
-		expect(entities[0].psgc_code).toBe(ABANGAN_NORTE.code);
-	});
-
-	it("101 children triggers 2 batches, all returned", async () => {
-		kv = buildSeededKV(100);
-		const result = await handleListChildren({ code: MARILAO.code }, kv, TEST_META);
-		const entities = parseData<ApiEntity[]>(result);
-		// Abangan Norte + Nono + 100 generated = 102 children
-		expect(entities.length).toBe(102);
-	});
-
-	// ── Edge cases ─────────────────────────────────────────────────
-
-	it("empty children array in KV returns empty JSON array (not 'no children' message)", async () => {
-		kv.seed({ "children:0000000000": JSON.stringify([]) });
-
-		const result = await handleListChildren({ code: "0000000000" }, kv, TEST_META);
-		const entities = parseData<ApiEntity[]>(result);
-		expect(entities).toEqual([]);
-		expect(result.content[0].text).not.toContain("No children found");
-	});
-
-	it("level filter that matches no children returns empty array", async () => {
+	it("offset skips records", async () => {
 		const result = await handleListChildren(
-			{ code: BULACAN.code, level: "Bgy" },
+			{ code: BULACAN.code, offset: 1 },
 			kv,
 			TEST_META,
 		);
-		const entities = parseData<ApiEntity[]>(result);
-		expect(entities).toEqual([]);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
+		expect(data).toHaveLength(1);
+		expect(pagination.total_count).toBe(2);
+		expect(pagination.offset).toBe(1);
 	});
 
-	it("duplicate codes in children index produces duplicate entities", async () => {
-		kv.seed({
-			"children:0000000000": JSON.stringify([
-				ABANGAN_NORTE.code,
-				ABANGAN_NORTE.code,
-			]),
-		});
+	it("limit caps results and sets has_more", async () => {
+		kv = buildSeededKV(100);
+		const result = await handleListChildren(
+			{ code: MARILAO.code, limit: 10 },
+			kv,
+			TEST_META,
+		);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
+		expect(data).toHaveLength(10);
+		expect(pagination.total_count).toBe(102);
+		expect(pagination.has_more).toBe(true);
+	});
+
+	it("default limit is 50", async () => {
+		kv = buildSeededKV(100);
+		const result = await handleListChildren(
+			{ code: MARILAO.code },
+			kv,
+			TEST_META,
+		);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
+		expect(data).toHaveLength(50);
+		expect(pagination.limit).toBe(50);
+		expect(pagination.has_more).toBe(true);
+	});
+
+	it("empty children array returns empty data with pagination", async () => {
+		kv.seed({ "children:0000000000": JSON.stringify([]) });
 
 		const result = await handleListChildren({ code: "0000000000" }, kv, TEST_META);
-		const entities = parseData<ApiEntity[]>(result);
-		expect(entities).toHaveLength(2);
-		expect(entities[0].psgc_code).toBe(ABANGAN_NORTE.code);
-		expect(entities[1].psgc_code).toBe(ABANGAN_NORTE.code);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
+		expect(data).toEqual([]);
+		expect(pagination.total_count).toBe(0);
+		expect(pagination.has_more).toBe(false);
+	});
+
+	it("child entities include child_counts", async () => {
+		const result = await handleListChildren({ code: BULACAN.code }, kv, TEST_META);
+		const { data } = parsePaginated<ApiEntity[]>(result);
+		const marilao = data.find((e) => e.psgc_code === MARILAO.code);
+		expect(marilao).toBeDefined();
+		expect(marilao!.child_counts).toEqual({ Bgy: 2 });
 	});
 });

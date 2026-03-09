@@ -1,4 +1,4 @@
-import type { ApiMeta, MetaConfig } from "../../src/response";
+import type { ApiMeta, MetaConfig, PaginationMeta } from "../../src/response";
 import { buildMeta } from "../../src/response";
 
 export const TEST_META_CONFIG: MetaConfig = {
@@ -20,4 +20,17 @@ export function parseEnvelope<T>(
 	result: { content: { type: string; text: string }[] },
 ): { _meta: ApiMeta; data: T } {
 	return JSON.parse(result.content[0].text);
+}
+
+export interface ParsedPaginatedResponse<T> {
+	data: T;
+	pagination: PaginationMeta;
+}
+
+/** Parse a wrapped paginated response, returning data and pagination. */
+export function parsePaginated<T>(
+	result: { content: { type: string; text: string }[] },
+): ParsedPaginatedResponse<T> {
+	const envelope = JSON.parse(result.content[0].text);
+	return { data: envelope.data as T, pagination: envelope.pagination };
 }

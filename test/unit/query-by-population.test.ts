@@ -12,14 +12,8 @@ import {
 	ABANGAN_NORTE,
 } from "../fixtures/entities";
 import type { MockKV } from "../fixtures/mock-kv";
-import { TEST_META, parseData, parseEnvelope } from "../fixtures/meta";
+import { TEST_META, parsePaginated, parseEnvelope } from "../fixtures/meta";
 import type { ApiEntity } from "../../src/response";
-
-interface PopResult {
-	results: ApiEntity[];
-	total_matching: number;
-	returned: number;
-}
 
 let kv: MockKV;
 
@@ -38,18 +32,18 @@ describe("handleQueryByPopulation", () => {
 		);
 		expect(result.isError).toBeUndefined();
 
-		const data = parseData<PopResult>(result);
-		expect(data.results.length).toBeGreaterThan(0);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
+		expect(data.length).toBeGreaterThan(0);
 
 		// All results should have population (nulls excluded)
-		for (const r of data.results) {
+		for (const r of data) {
 			expect(r.population).not.toBeNull();
 		}
 
 		// Verify descending order
-		for (let i = 1; i < data.results.length; i++) {
-			expect(data.results[i - 1].population!).toBeGreaterThanOrEqual(
-				data.results[i].population!,
+		for (let i = 1; i < data.length; i++) {
+			expect(data[i - 1].population!).toBeGreaterThanOrEqual(
+				data[i].population!,
 			);
 		}
 	});
@@ -60,11 +54,11 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data } = parsePaginated<ApiEntity[]>(result);
 
-		for (let i = 1; i < data.results.length; i++) {
-			expect(data.results[i - 1].population!).toBeLessThanOrEqual(
-				data.results[i].population!,
+		for (let i = 1; i < data.length; i++) {
+			expect(data[i - 1].population!).toBeLessThanOrEqual(
+				data[i].population!,
 			);
 		}
 	});
@@ -77,13 +71,13 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data } = parsePaginated<ApiEntity[]>(result);
 
-		for (const r of data.results) {
+		for (const r of data) {
 			expect(r.population!).toBeGreaterThanOrEqual(1000000);
 		}
 		// Should include QC (2.9M) and Manila (1.8M) but not Malolos (252K)
-		const codes = data.results.map((r) => r.psgc_code);
+		const codes = data.map((r) => r.psgc_code);
 		expect(codes).toContain(QUEZON_CITY.code);
 		expect(codes).toContain(MANILA.code);
 		expect(codes).not.toContain(MALOLOS.code);
@@ -95,9 +89,9 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data } = parsePaginated<ApiEntity[]>(result);
 
-		for (const r of data.results) {
+		for (const r of data) {
 			expect(r.population!).toBeLessThanOrEqual(500000);
 		}
 	});
@@ -108,14 +102,14 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data } = parsePaginated<ApiEntity[]>(result);
 
-		for (const r of data.results) {
+		for (const r of data) {
 			expect(r.population!).toBeGreaterThanOrEqual(200000);
 			expect(r.population!).toBeLessThanOrEqual(300000);
 		}
 		// Malolos (252K) should be in range
-		expect(data.results.map((r) => r.psgc_code)).toContain(MALOLOS.code);
+		expect(data.map((r) => r.psgc_code)).toContain(MALOLOS.code);
 	});
 
 	// ── Null population exclusion ─────────────────────────────────
@@ -126,13 +120,13 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data } = parsePaginated<ApiEntity[]>(result);
 
 		// MIMAROPA has null population and should be excluded
-		const codes = data.results.map((r) => r.psgc_code);
+		const codes = data.map((r) => r.psgc_code);
 		expect(codes).not.toContain("1700000000");
 
-		for (const r of data.results) {
+		for (const r of data) {
 			expect(r.population).not.toBeNull();
 		}
 	});
@@ -146,10 +140,10 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data } = parsePaginated<ApiEntity[]>(result);
 
 		// Should include Malolos (03*) but not Manila or QC (13*)
-		for (const r of data.results) {
+		for (const r of data) {
 			expect(r.psgc_code.startsWith("03")).toBe(true);
 		}
 	});
@@ -172,14 +166,14 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data } = parsePaginated<ApiEntity[]>(result);
 
 		// Abangan Norte (15,238) should be present
-		expect(data.results.map((r) => r.psgc_code)).toContain(
+		expect(data.map((r) => r.psgc_code)).toContain(
 			ABANGAN_NORTE.code,
 		);
 
-		for (const r of data.results) {
+		for (const r of data) {
 			expect(r.level).toBe("Bgy");
 			expect(r.population).not.toBeNull();
 		}
@@ -197,20 +191,20 @@ describe("handleQueryByPopulation", () => {
 		expect(result.content[0].text).toContain("cannot exceed");
 	});
 
-	// ── Limit ─────────────────────────────────────────────────────
+	// ── Limit and pagination ──────────────────────────────────────
 
-	it("respects limit and reports total_matching", async () => {
+	it("respects limit and reports total_count in pagination", async () => {
 		const result = await handleQueryByPopulation(
 			{ level: "Reg", limit: 1 },
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
 
-		expect(data.returned).toBe(1);
-		expect(data.results).toHaveLength(1);
+		expect(data).toHaveLength(1);
 		// There are 2 regions with population (NCR, Central Luzon)
-		expect(data.total_matching).toBeGreaterThanOrEqual(2);
+		expect(pagination.total_count).toBeGreaterThanOrEqual(2);
+		expect(pagination.has_more).toBe(true);
 	});
 
 	// ── Error branches ───────────────────────────────────────────
@@ -243,11 +237,12 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const data = parseData<PopResult>(result);
+		const { data, pagination } = parsePaginated<ApiEntity[]>(result);
 
-		// 150 generated (with population) + Abangan Norte = 151; Ñoño has null population so filtered
-		expect(data.total_matching).toBe(151);
-		expect(data.returned).toBe(100);
+		// 150 generated (with population) + Abangan Norte = 151; Nono has null population so filtered
+		expect(pagination.total_count).toBe(151);
+		expect(data).toHaveLength(100);
+		expect(pagination.has_more).toBe(true);
 	});
 
 	it("returns error when min_population exceeds max_population", async () => {
@@ -268,7 +263,7 @@ describe("handleQueryByPopulation", () => {
 			kv,
 			TEST_META,
 		);
-		const envelope = parseEnvelope<PopResult>(result);
+		const envelope = parseEnvelope<ApiEntity[]>(result);
 		expect(envelope._meta).toEqual(TEST_META);
 	});
 });

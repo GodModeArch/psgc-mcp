@@ -42,7 +42,7 @@ const LISTABLE_LEVELS: [PSGCLevel, ...PSGCLevel[]] = [
 export class PsgcMCP extends McpAgent {
 	server = new McpServer({
 		name: "PSGC",
-		version: "1.3.0",
+		version: "1.4.0",
 	});
 
 	async init() {
@@ -104,7 +104,7 @@ export class PsgcMCP extends McpAgent {
 
 		this.server.tool(
 			"list_children",
-			"List the direct children of a PSGC entity. For a region, returns provinces/districts. For a province, returns cities/municipalities. For a city/municipality, returns barangays. Optionally filter by level.",
+			"List the direct children of a PSGC entity. For a region, returns provinces/districts. For a province, returns cities/municipalities. For a city/municipality, returns barangays. Optionally filter by level. Paginated (default limit: 50).",
 			{
 				code: z
 					.string()
@@ -114,23 +114,51 @@ export class PsgcMCP extends McpAgent {
 					.enum(PSGC_LEVELS)
 					.optional()
 					.describe("Filter children by geographic level"),
+				offset: z
+					.number()
+					.int()
+					.min(0)
+					.optional()
+					.describe("Number of records to skip (default 0)"),
+				limit: z
+					.number()
+					.int()
+					.min(1)
+					.max(200)
+					.optional()
+					.describe("Max records to return (default 50, max 200)"),
 			},
-			async ({ code, level }) => handleListChildren({ code, level }, kv, meta),
+			async ({ code, level, offset, limit }) =>
+				handleListChildren({ code, level, offset, limit }, kv, meta),
 		);
 
 		// ── Tool 5: list_by_type ────────────────────────────────────
 
 		this.server.tool(
 			"list_by_type",
-			"List all PSGC entities of a given geographic level. Barangay (Bgy) is excluded because there are 42,000+ barangays. To find barangays, use 'search' with a name query or 'list_children' on a city/municipality.",
+			"List all PSGC entities of a given geographic level. Barangay (Bgy) is excluded because there are 42,000+ barangays. To find barangays, use 'search' with a name query or 'list_children' on a city/municipality. Paginated (default limit: 50).",
 			{
 				level: z
 					.enum(LISTABLE_LEVELS)
 					.describe(
 						"Geographic level: Reg (region), Prov (province), Dist (district), City, Mun (municipality), SubMun (sub-municipality), SGU (special geographic unit)",
 					),
+				offset: z
+					.number()
+					.int()
+					.min(0)
+					.optional()
+					.describe("Number of records to skip (default 0)"),
+				limit: z
+					.number()
+					.int()
+					.min(1)
+					.max(200)
+					.optional()
+					.describe("Max records to return (default 50, max 200)"),
 			},
-			async ({ level }) => handleListByType({ level }, kv, meta),
+			async ({ level, offset, limit }) =>
+				handleListByType({ level, offset, limit }, kv, meta),
 		);
 
 		// ── Tool 6: batch_lookup ────────────────────────────────────
@@ -180,6 +208,12 @@ export class PsgcMCP extends McpAgent {
 					.enum(["asc", "desc"])
 					.optional()
 					.describe("Sort order by population (default: desc)"),
+				offset: z
+					.number()
+					.int()
+					.min(0)
+					.optional()
+					.describe("Number of records to skip (default 0)"),
 				limit: z
 					.number()
 					.int()
@@ -188,9 +222,9 @@ export class PsgcMCP extends McpAgent {
 					.optional()
 					.describe("Max results to return (default 10, max 100)"),
 			},
-			async ({ level, parent_code, min_population, max_population, sort, limit }) =>
+			async ({ level, parent_code, min_population, max_population, sort, offset, limit }) =>
 				handleQueryByPopulation(
-					{ level, parent_code, min_population, max_population, sort, limit },
+					{ level, parent_code, min_population, max_population, sort, offset, limit },
 					kv,
 					meta,
 				),

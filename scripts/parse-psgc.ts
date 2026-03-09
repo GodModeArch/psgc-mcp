@@ -272,6 +272,7 @@ export async function parseExcelToEntities(
 			parent: null,
 			regionCode: null,
 			provinceCode: null,
+			childCounts: null,
 		};
 
 		// Derive region and province codes
@@ -309,6 +310,57 @@ async function main() {
 	}
 	console.log(`Parents assigned: ${hasParent}, missing: ${noParent}`);
 
+	// ── Build children map and compute descendant counts ─────────
+
+	const childrenMap = new Map<string, string[]>();
+	for (const entity of entities.values()) {
+		if (entity.parent) {
+			const children = childrenMap.get(entity.parent) ?? [];
+			children.push(entity.code);
+			childrenMap.set(entity.parent, children);
+		}
+	}
+	console.log(`Children index entries: ${childrenMap.size}`);
+
+	// Compute descendant counts per entity
+	const countsCache = new Map<string, Partial<Record<string, number>>>();
+
+	function getDescendantCounts(code: string): Partial<Record<string, number>> {
+		if (countsCache.has(code)) return countsCache.get(code)!;
+		countsCache.set(code, {}); // sentinel: break cycles before recursing
+
+		const directChildren = childrenMap.get(code) ?? [];
+		const counts: Partial<Record<string, number>> = {};
+
+		for (const childCode of directChildren) {
+			const child = entities.get(childCode);
+			if (!child) continue;
+
+			// Count this child's level
+			counts[child.level] = (counts[child.level] ?? 0) + 1;
+
+			// Add this child's descendant counts
+			const childDescendants = getDescendantCounts(childCode);
+			for (const [level, count] of Object.entries(childDescendants)) {
+				counts[level] = (counts[level] ?? 0) + count;
+			}
+		}
+
+		countsCache.set(code, counts);
+		return counts;
+	}
+
+	for (const entity of entities.values()) {
+		const counts = getDescendantCounts(entity.code);
+		entity.childCounts = Object.keys(counts).length > 0 ? counts : null;
+	}
+
+	let hasChildCounts = 0;
+	for (const e of entities.values()) {
+		if (e.childCounts) hasChildCounts++;
+	}
+	console.log(`Entities with descendant counts: ${hasChildCounts}`);
+
 	// ── Build KV datasets ──────────────────────────────────────────
 
 	type KVEntry = { key: string; value: string };
@@ -323,35 +375,31 @@ async function main() {
 	}
 	console.log(`Entity KV entries: ${kvEntries.length}`);
 
-	// 2. Children index
-	const childrenMap = new Map<string, string[]>();
-	for (const entity of entities.values()) {
-		if (entity.parent) {
-			const children = childrenMap.get(entity.parent) ?? [];
-			children.push(entity.code);
-			childrenMap.set(entity.parent, children);
-		}
-	}
-	for (const [parentCode, children] of childrenMap) {
+	// 2. Children index (pre-hydrated entity arrays)
+	for (const [parentCode, childCodes] of childrenMap) {
+		const childEntities = childCodes
+			.map((c) => entities.get(c))
+			.filter((e): e is PSGCEntity => e !== undefined)
+			.sort((a, b) => a.code.localeCompare(b.code));
 		kvEntries.push({
 			key: `${KV_PREFIX.children}:${parentCode}`,
-			value: JSON.stringify(children.sort()),
+			value: JSON.stringify(childEntities),
 		});
 	}
-	console.log(`Children index entries: ${childrenMap.size}`);
 
-	// 3. Type index (skip Bgy - too large)
-	const typeMap = new Map<PSGCLevel, string[]>();
+	// 3. Type index (pre-hydrated entity arrays, skip Bgy)
+	const typeMap = new Map<PSGCLevel, PSGCEntity[]>();
 	for (const entity of entities.values()) {
 		if (entity.level === "Bgy") continue;
-		const codes = typeMap.get(entity.level) ?? [];
-		codes.push(entity.code);
-		typeMap.set(entity.level, codes);
+		const list = typeMap.get(entity.level) ?? [];
+		list.push(entity);
+		typeMap.set(entity.level, list);
 	}
-	for (const [level, codes] of typeMap) {
+	for (const [level, levelEntities] of typeMap) {
+		levelEntities.sort((a, b) => a.code.localeCompare(b.code));
 		kvEntries.push({
 			key: `${KV_PREFIX.type}:${level}`,
-			value: JSON.stringify(codes.sort()),
+			value: JSON.stringify(levelEntities),
 		});
 	}
 	console.log(
