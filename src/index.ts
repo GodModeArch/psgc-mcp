@@ -45,7 +45,7 @@ const psgcCode = z.string().length(10).regex(/^\d{10}$/, "PSGC code must be exac
 export class PsgcMCP extends McpAgent {
 	server = new McpServer({
 		name: "PSGC",
-		version: "1.4.0",
+		version: "1.4.1",
 	});
 
 	async init() {
