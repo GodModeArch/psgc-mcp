@@ -327,6 +327,7 @@ async function main() {
 
 	function getDescendantCounts(code: string): Partial<Record<string, number>> {
 		if (countsCache.has(code)) return countsCache.get(code)!;
+		countsCache.set(code, {}); // sentinel: break cycles before recursing
 
 		const directChildren = childrenMap.get(code) ?? [];
 		const counts: Partial<Record<string, number>> = {};
