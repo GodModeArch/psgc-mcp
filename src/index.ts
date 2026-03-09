@@ -208,6 +208,12 @@ export class PsgcMCP extends McpAgent {
 					.enum(["asc", "desc"])
 					.optional()
 					.describe("Sort order by population (default: desc)"),
+				offset: z
+					.number()
+					.int()
+					.min(0)
+					.optional()
+					.describe("Number of records to skip (default 0)"),
 				limit: z
 					.number()
 					.int()
@@ -216,9 +222,9 @@ export class PsgcMCP extends McpAgent {
 					.optional()
 					.describe("Max results to return (default 10, max 100)"),
 			},
-			async ({ level, parent_code, min_population, max_population, sort, limit }) =>
+			async ({ level, parent_code, min_population, max_population, sort, offset, limit }) =>
 				handleQueryByPopulation(
-					{ level, parent_code, min_population, max_population, sort, limit },
+					{ level, parent_code, min_population, max_population, sort, offset, limit },
 					kv,
 					meta,
 				),
