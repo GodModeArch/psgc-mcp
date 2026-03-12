@@ -9,6 +9,10 @@ A [Model Context Protocol](https://modelcontextprotocol.io/) server that provide
 
 Public, read-only, no authentication required. Data sourced directly from the [Philippine Statistics Authority](https://psa.gov.ph/classification/psgc/) quarterly PSGC publication. Cached in Cloudflare KV for reliability and low-latency global access.
 
+<a href="https://glama.ai/mcp/servers/@GodModeArch/psgc-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@GodModeArch/psgc-mcp/badge" alt="psgc-mcp MCP server" />
+</a>
+
 ## Tools
 
 | Tool | Description |
